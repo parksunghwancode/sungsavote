@@ -1,7 +1,6 @@
 'use client'
 
 import { Backdrop, CandidatePhoto, LightStreaks } from '../primitives'
-import { VideoSlot } from '../video-slot'
 import type { SceneProps } from './types'
 
 function Rings() {
@@ -25,8 +24,8 @@ function Rings() {
   )
 }
 
-function OpeningGraphic({ control, results }: SceneProps) {
-  const title = results.title || control.electionTitle
+function OpeningGraphic({ config, results }: SceneProps) {
+  const title = results.title || config.electionTitle
   const chars = Array.from(title)
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -39,7 +38,7 @@ function OpeningGraphic({ control, results }: SceneProps) {
           LIVE · 특집 개표방송
         </div>
         <p className="bc-rise text-4xl font-bold tracking-[0.4em] text-muted-foreground" style={{ animationDelay: '0.2s' }}>
-          {control.schoolName}
+          {config.schoolName}
         </p>
         <h1 className="flex flex-wrap justify-center text-[150px] font-black leading-none tracking-tight">
           {chars.map((ch, i) => (
@@ -62,19 +61,11 @@ function OpeningGraphic({ control, results }: SceneProps) {
 }
 
 export function OpeningScene(props: SceneProps) {
-  return (
-    <VideoSlot
-      scene="opening"
-      control={props.control}
-      media={props.media}
-      muted={props.muted}
-      fallback={<OpeningGraphic {...props} />}
-    />
-  )
+  return <OpeningGraphic {...props} />
 }
 
-function EndingGraphic({ control, results }: SceneProps) {
-  const credits = control.credits.split('\n').filter(Boolean)
+function EndingGraphic({ config, results }: SceneProps) {
+  const credits = config.credits
   const winner = results.stats.leader
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -82,7 +73,7 @@ function EndingGraphic({ control, results }: SceneProps) {
       <LightStreaks count={5} color="var(--gold)" />
       <div className="relative z-10 grid h-full grid-cols-2 items-center gap-16 px-32">
         <div className="flex flex-col gap-8">
-          <p className="bc-rise text-3xl font-bold tracking-[0.3em] text-primary">{control.schoolName}</p>
+          <p className="bc-rise text-3xl font-bold tracking-[0.3em] text-primary">{config.schoolName}</p>
           <h1 className="bc-rise text-[120px] font-black leading-[1.05]" style={{ animationDelay: '0.15s' }}>
             시청해 주셔서
             <br />
@@ -92,7 +83,7 @@ function EndingGraphic({ control, results }: SceneProps) {
             <div className="bc-rise flex items-center gap-6 border-l-4 border-gold bg-navy/80 p-6" style={{ animationDelay: '0.5s' }}>
               <CandidatePhoto candidate={winner} className="size-28 shrink-0 text-5xl" />
               <div className="flex flex-col gap-1">
-                <span className="text-2xl font-bold text-muted-foreground">{control.electionTitle} 당선인</span>
+                <span className="text-2xl font-bold text-muted-foreground">{config.electionTitle} 당선인</span>
                 <span className="text-5xl font-black">
                   기호 {winner.number}번 {winner.name}
                 </span>
@@ -129,13 +120,5 @@ function EndingGraphic({ control, results }: SceneProps) {
 }
 
 export function EndingScene(props: SceneProps) {
-  return (
-    <VideoSlot
-      scene="ending"
-      control={props.control}
-      media={props.media}
-      muted={props.muted}
-      fallback={<EndingGraphic {...props} />}
-    />
-  )
+  return <EndingGraphic {...props} />
 }

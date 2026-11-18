@@ -1,5 +1,5 @@
-import { AdminDashboard } from '@/components/admin/admin-dashboard'
+import { BroadcastClient } from '@/components/broadcast/broadcast-client'
 
 export default function Page() {
-  return <AdminDashboard />
+  return <BroadcastClient />
 }

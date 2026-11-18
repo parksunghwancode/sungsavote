@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { Backdrop, CandidatePhoto, LightStreaks } from '../primitives'
-import { VideoSlot } from '../video-slot'
 import type { SceneProps } from './types'
 
 function CandidateIntro({ results }: SceneProps) {
@@ -99,13 +98,5 @@ function CandidateIntro({ results }: SceneProps) {
 }
 
 export function CandidatesScene(props: SceneProps) {
-  return (
-    <VideoSlot
-      scene="candidates"
-      control={props.control}
-      media={props.media}
-      muted={props.muted}
-      fallback={<CandidateIntro {...props} />}
-    />
-  )
+  return <CandidateIntro {...props} />
 }

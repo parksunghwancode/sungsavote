@@ -1,7 +1,6 @@
 'use client'
 
 import { Backdrop, CandidatePhoto, CountUp, LightStreaks } from '../primitives'
-import { VideoSlot } from '../video-slot'
 import type { SceneProps } from './types'
 
 function InterimGraphic({ results }: SceneProps) {
@@ -86,13 +85,5 @@ function InterimGraphic({ results }: SceneProps) {
 }
 
 export function InterimScene(props: SceneProps) {
-  return (
-    <VideoSlot
-      scene="interim"
-      control={props.control}
-      media={props.media}
-      muted={props.muted}
-      fallback={<InterimGraphic {...props} />}
-    />
-  )
+  return <InterimGraphic {...props} />
 }

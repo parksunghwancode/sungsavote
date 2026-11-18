@@ -1,60 +1,96 @@
 'use client'
 
-import { Maximize, Volume2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useControl } from '@/lib/control-store'
+import { ChevronLeft, ChevronRight, Maximize } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { SCENES } from '@/lib/types'
 import { BroadcastView } from './broadcast-view'
 import { Stage } from './primitives'
 
-export function BroadcastClient() {
-  const control = useControl()
-  const [armed, setArmed] = useState(false)
-  const [idle, setIdle] = useState(false)
+const NEXT_KEYS = new Set(['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'])
+const PREV_KEYS = new Set(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'])
 
-  useEffect(() => {
-    let t: ReturnType<typeof setTimeout>
-    const wake = () => {
-      setIdle(false)
-      clearTimeout(t)
-      t = setTimeout(() => setIdle(true), 2500)
-    }
-    wake()
-    window.addEventListener('mousemove', wake)
-    return () => {
-      clearTimeout(t)
-      window.removeEventListener('mousemove', wake)
-    }
+export function BroadcastClient() {
+  const [index, setIndex] = useState(0)
+  const [fullscreen, setFullscreen] = useState(false)
+
+  const go = useCallback((delta: number) => {
+    setIndex((i) => Math.min(SCENES.length - 1, Math.max(0, i + delta)))
   }, [])
 
-  const start = (fullscreen: boolean) => {
-    setArmed(true)
-    if (fullscreen) void document.documentElement.requestFullscreen?.().catch(() => {})
+  const enterFullscreen = () => {
+    void document.documentElement.requestFullscreen?.().catch(() => {})
   }
 
+  useEffect(() => {
+    const onChange = () => setFullscreen(!!document.fullscreenElement)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLElement && e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return
+      if (NEXT_KEYS.has(e.key)) {
+        e.preventDefault()
+        go(1)
+      } else if (PREV_KEYS.has(e.key)) {
+        e.preventDefault()
+        go(-1)
+      } else if (e.key === 'Home') setIndex(0)
+      else if (e.key === 'End') setIndex(SCENES.length - 1)
+      else if (e.key === 'f' || e.key === 'F') {
+        if (document.fullscreenElement) void document.exitFullscreen()
+        else enterFullscreen()
+      }
+    }
+    document.addEventListener('fullscreenchange', onChange)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('fullscreenchange', onChange)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [go])
+
+  const current = SCENES[index]
+
   return (
-    <main className={idle ? 'bc-hide-cursor' : undefined} onDoubleClick={() => start(true)}>
-      <h1 className="sr-only">전교회장 선거 개표방송 송출 화면</h1>
+    <main className={fullscreen ? 'bc-hide-cursor' : undefined}>
+      <h1 className="sr-only">전교회장 선거 개표방송</h1>
+      <p className="sr-only" aria-live="polite">
+        {`${index + 1}번째 화면: ${current.label}`}
+      </p>
       <Stage>
-        <BroadcastView control={control} muted={!armed} />
+        <BroadcastView scene={current.key} />
       </Stage>
-      {!armed && (
-        <div className="fixed bottom-6 right-6 z-50 flex gap-2">
-          <button
-            type="button"
-            onClick={() => start(false)}
-            className="flex items-center gap-2 rounded-md border border-border bg-navy/90 px-4 py-2.5 text-sm font-bold backdrop-blur hover:bg-secondary"
-          >
-            <Volume2 className="size-4" aria-hidden="true" />
-            소리 켜기
-          </button>
-          <button
-            type="button"
-            onClick={() => start(true)}
-            className="flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/85"
-          >
-            <Maximize className="size-4" aria-hidden="true" />
-            전체화면 송출 시작
-          </button>
+
+      {!fullscreen && (
+        <div className="fixed inset-x-0 bottom-6 z-50 flex justify-center px-6">
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-navy/90 p-2 backdrop-blur">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              disabled={index === 0}
+              className="flex size-10 items-center justify-center rounded-md hover:bg-secondary disabled:opacity-30"
+              aria-label="이전 화면"
+            >
+              <ChevronLeft className="size-5" aria-hidden="true" />
+            </button>
+            <span className="min-w-36 text-center text-sm font-bold tabular-nums">
+              {index + 1} / {SCENES.length} · {current.label}
+            </span>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              disabled={index === SCENES.length - 1}
+              className="flex size-10 items-center justify-center rounded-md hover:bg-secondary disabled:opacity-30"
+              aria-label="다음 화면"
+            >
+              <ChevronRight className="size-5" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={enterFullscreen}
+              className="ml-2 flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/85"
+            >
+              <Maximize className="size-4" aria-hidden="true" />
+              전체화면 실행
+            </button>
+          </div>
         </div>
       )}
     </main>

@@ -1,7 +1,6 @@
 'use client'
 
 import { Backdrop, CandidatePhoto, CountUp, LightStreaks } from '../primitives'
-import { VideoSlot } from '../video-slot'
 import type { SceneProps } from './types'
 
 const CONFETTI_COLORS = ['var(--gold)', 'var(--primary)', 'var(--foreground)', 'var(--live)']
@@ -29,7 +28,7 @@ function Confetti() {
   )
 }
 
-function WinnerGraphic({ control, results }: SceneProps) {
+function WinnerGraphic({ config, results }: SceneProps) {
   const winner = results.stats.leader
   if (!winner) {
     return (
@@ -63,16 +62,16 @@ function WinnerGraphic({ control, results }: SceneProps) {
             style={{ animationDelay: '1.6s' }}
           >
             <span className="text-2xl font-black tracking-widest">축</span>
-            <span className="text-6xl font-black leading-none">{control.winnerLabel.replace(' ', '')}</span>
+            <span className="text-6xl font-black leading-none">{config.winnerLabel.replace(' ', '')}</span>
           </div>
         </div>
 
         <div className="flex flex-1 flex-col gap-6">
           <p className="bc-slide-right text-4xl font-bold tracking-[0.2em] text-gold">
-            {control.schoolName} {control.electionTitle}
+            {config.schoolName} {config.electionTitle}
           </p>
           <div className="bc-wipe flex w-fit items-center bg-live px-8 py-3 text-6xl font-black" style={{ animationDelay: '0.5s' }}>
-            {control.winnerLabel}
+            {config.winnerLabel}
           </div>
           <div className="bc-slide-right flex items-baseline gap-6" style={{ animationDelay: '0.8s' }}>
             <span className="font-mono text-7xl font-bold" style={{ color: winner.color }}>
@@ -118,13 +117,5 @@ function WinnerGraphic({ control, results }: SceneProps) {
 }
 
 export function WinnerScene(props: SceneProps) {
-  return (
-    <VideoSlot
-      scene="winner"
-      control={props.control}
-      media={props.media}
-      muted={props.muted}
-      fallback={<WinnerGraphic {...props} />}
-    />
-  )
+  return <WinnerGraphic {...props} />
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { ControlState } from '@/lib/control-store'
+import type { BroadcastConfig } from "@/lib/config"
 import type { ResultsState } from '@/hooks/use-results'
 import { SCENES, type SceneKey } from '@/lib/types'
 
@@ -15,7 +15,7 @@ function useClock() {
   return now
 }
 
-export function HeaderBug({ control, scene }: { control: ControlState; scene: SceneKey }) {
+export function HeaderBug({ config, scene }: { config: BroadcastConfig; scene: SceneKey }) {
   const now = useClock()
   const label = SCENES.find((s) => s.key === scene)?.label
   return (
@@ -29,8 +29,8 @@ export function HeaderBug({ control, scene }: { control: ControlState; scene: Sc
           </span>
         </div>
         <div className="flex flex-col justify-center bg-navy/95 px-6 py-3 backdrop-blur">
-          <span className="text-sm font-medium tracking-widest text-muted-foreground">{control.schoolName}</span>
-          <span className="text-2xl font-black leading-tight">{control.electionTitle}</span>
+          <span className="text-sm font-medium tracking-widest text-muted-foreground">{config.schoolName}</span>
+          <span className="text-2xl font-black leading-tight">{config.electionTitle}</span>
         </div>
         <div className="flex items-center border-l border-border bg-navy-deep/95 px-6 text-xl font-bold text-gold">
           {label}
@@ -49,17 +49,17 @@ export function HeaderBug({ control, scene }: { control: ControlState; scene: Sc
   )
 }
 
-export function Ticker({ control, results }: { control: ControlState; results: ResultsState }) {
+export function Ticker({ config, results }: { config: BroadcastConfig; results: ResultsState }) {
   const { stats, ranked } = results
   const summary =
-    control.tickerAutoSummary && ranked.length
+    ranked.length
       ? [
           stats.countRate !== null ? `개표율 ${stats.countRate.toFixed(1)}%` : null,
           ...ranked.map((c) => `${c.rank}위 기호 ${c.number}번 ${c.name} ${c.votes.toLocaleString()}표 (${c.pct.toFixed(1)}%)`),
           stats.leader && stats.runnerUp ? `1·2위 격차 ${stats.margin.toLocaleString()}표` : null,
         ].filter(Boolean)
       : []
-  const items = [control.ticker, ...summary].filter(Boolean) as string[]
+  const items = [config.ticker, ...summary].filter(Boolean) as string[]
   const line = items.join('     ◆     ')
   const duration = Math.max(30, line.length * 0.28)
 
@@ -81,33 +81,8 @@ export function Ticker({ control, results }: { control: ControlState; results: R
         </div>
       </div>
       <div className="flex shrink-0 items-center bg-navy px-6 text-lg font-bold text-muted-foreground">
-        {results.isDummy ? '모의 데이터' : '실시간 집계'}
+        실시간 집계
       </div>
-    </div>
-  )
-}
-
-export function LowerThird({ control, withTicker }: { control: ControlState; withTicker: boolean }) {
-  if (!control.lowerThird.visible || (!control.lowerThird.title && !control.lowerThird.text)) return null
-  return (
-    <div
-      key={`${control.lowerThird.title}-${control.lowerThird.text}`}
-      className="absolute left-12 z-30 flex items-stretch shadow-2xl shadow-black/70"
-      style={{ bottom: withTicker ? 104 : 56 }}
-    >
-      {control.lowerThird.title && (
-        <div className="bc-wipe flex items-center bg-gold px-8 py-4 text-3xl font-black text-accent-foreground">
-          {control.lowerThird.title}
-        </div>
-      )}
-      {control.lowerThird.text && (
-        <div
-          className="bc-wipe flex max-w-[1300px] items-center bg-foreground px-8 py-4 text-3xl font-bold text-background"
-          style={{ animationDelay: '0.15s' }}
-        >
-          {control.lowerThird.text}
-        </div>
-      )}
     </div>
   )
 }

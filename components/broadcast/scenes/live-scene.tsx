@@ -62,7 +62,7 @@ export function LiveScene({ results }: SceneProps) {
               <span className="ml-4 text-2xl font-bold text-muted-foreground">유효표 기준 득표율</span>
             </h2>
             <span className="text-2xl font-bold text-muted-foreground">
-              {results.data ? new Date(results.data.updatedAt).toLocaleTimeString('ko-KR', { hour12: false }) : ''} 기준
+              {results.updatedAt ? `${new Date(results.updatedAt).toLocaleTimeString('ko-KR', { hour12: false })} 기준` : ''}
             </span>
           </div>
           <ol className="flex flex-1 flex-col gap-4">
@@ -123,7 +123,6 @@ export function LiveScene({ results }: SceneProps) {
         <aside className="bc-slide-right flex w-[520px] shrink-0 flex-col gap-6 bg-navy/90 p-8" aria-label="개표 진행 현황">
           <div className="flex items-center justify-between">
             <h2 className="text-3xl font-black">개표 진행</h2>
-            {results.isDummy && <span className="border border-gold px-3 py-1 text-lg font-bold text-gold">모의 데이터</span>}
           </div>
           <div className="flex justify-center">
             <ProgressRing value={stats.countRate} label="개표율" />
