@@ -1,45 +1,14 @@
 'use client'
 
-import { Backdrop, CandidatePhoto, CountUp } from '../primitives'
+import { CandidatePhoto, CountUp, NumberChip, ShareBar, StudioBackdrop } from '../primitives'
 import type { SceneProps } from './types'
-
-function ProgressRing({ value, label }: { value: number | null; label: string }) {
-  const r = 120
-  const len = 2 * Math.PI * r
-  const pct = value ?? 0
-  return (
-    <div className="relative flex size-[300px] items-center justify-center">
-      <svg viewBox="0 0 300 300" className="absolute inset-0 -rotate-90" aria-hidden="true">
-        <circle cx="150" cy="150" r={r} fill="none" stroke="var(--border)" strokeWidth="18" />
-        <circle
-          cx="150"
-          cy="150"
-          r={r}
-          fill="none"
-          stroke="var(--gold)"
-          strokeWidth="18"
-          strokeDasharray={len}
-          strokeDashoffset={len * (1 - pct / 100)}
-          style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
-        />
-      </svg>
-      <div className="flex flex-col items-center">
-        <span className="text-2xl font-bold text-muted-foreground">{label}</span>
-        <span className="font-mono text-8xl font-bold leading-none">
-          {value === null ? '—' : <CountUp value={value} decimals={1} />}
-          {value !== null && <span className="text-5xl">%</span>}
-        </span>
-      </div>
-    </div>
-  )
-}
 
 function Stat({ label, value, suffix = '표' }: { label: string; value: number | null; suffix?: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-border py-4">
-      <span className="text-2xl font-medium text-muted-foreground">{label}</span>
-      <span className="font-mono text-4xl font-semibold">
-        {value === null ? '—' : <CountUp value={value} />}
+    <div className="flex items-center justify-between border-b border-border py-5 last:border-0">
+      <span className="text-2xl font-bold text-muted-foreground">{label}</span>
+      <span className="font-mono text-[44px] font-semibold leading-none">
+        {value === null ? '—' : <CountUp value={value} decimals={suffix === '%' ? 1 : 0} />}
         <span className="ml-1 font-sans text-xl text-muted-foreground">{value === null ? '' : suffix}</span>
       </span>
     </div>
@@ -47,23 +16,22 @@ function Stat({ label, value, suffix = '표' }: { label: string; value: number |
 }
 
 export function LiveScene({ results }: SceneProps) {
-  const { candidates, stats } = results
-  const ranked = results.ranked
-  const maxPct = Math.max(1, ...candidates.map((c) => c.pct))
+  const { ranked, stats } = results
+  const updated = results.updatedAt
+    ? new Date(results.updatedAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })
+    : null
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <Backdrop />
-      <div className="relative z-10 flex h-full gap-10 px-12 pb-[110px] pt-[150px]">
+      <StudioBackdrop dim={0.62} />
+      <div className="relative z-10 flex h-full gap-8 px-12 pb-[112px] pt-[160px]">
         <section className="flex flex-1 flex-col gap-5" aria-label="후보별 득표 현황">
           <div className="bc-rise flex items-end justify-between">
-            <h2 className="text-5xl font-black">
+            <h2 className="flex items-center gap-5 text-5xl font-black">
+              <span className="h-12 w-2 bg-live" aria-hidden="true" />
               후보별 득표 현황
-              <span className="ml-4 text-2xl font-bold text-muted-foreground">유효표 기준 득표율</span>
             </h2>
-            <span className="text-2xl font-bold text-muted-foreground">
-              {results.updatedAt ? `${new Date(results.updatedAt).toLocaleTimeString('ko-KR', { hour12: false })} 기준` : ''}
-            </span>
+            {updated && <span className="text-2xl font-bold text-foreground/70">{updated} 현재</span>}
           </div>
           <ol className="flex flex-1 flex-col gap-4">
             {ranked.map((c, i) => {
@@ -71,48 +39,29 @@ export function LiveScene({ results }: SceneProps) {
               return (
                 <li
                   key={c.number}
-                  className="bc-slide-left relative flex flex-1 items-stretch overflow-hidden bg-navy/90"
-                  style={{ animationDelay: `${0.1 + i * 0.12}s`, order: i, boxShadow: leading ? `inset 0 0 0 3px var(--gold)` : undefined }}
+                  className="bc-panel bc-slide-left relative flex flex-1 items-stretch overflow-hidden"
+                  style={{ animationDelay: `${0.1 + i * 0.12}s` }}
                 >
-                  <div className="flex w-24 shrink-0 flex-col items-center justify-center bg-navy-deep">
-                    <span className="font-mono text-6xl font-bold leading-none" style={{ color: leading ? 'var(--gold)' : 'var(--foreground)' }}>
-                      {c.rank}
-                    </span>
-                    <span className="text-lg font-bold text-muted-foreground">위</span>
-                  </div>
-                  <CandidatePhoto candidate={c} className="w-40 shrink-0 text-6xl" />
-                  <div className="relative flex flex-1 flex-col justify-center gap-3 px-8">
-                    <div className="flex items-baseline justify-between gap-6">
-                      <div className="flex items-baseline gap-4">
-                        <span className="px-3 py-0.5 font-mono text-3xl font-bold" style={{ background: c.color }}>
-                          {c.number}
-                        </span>
-                        <span className="text-5xl font-black">{c.name}</span>
-                        {leading && <span className="bg-gold px-3 py-1 text-xl font-black text-accent-foreground">선두</span>}
+                  <NumberChip number={c.number} color={c.color} className="w-28 text-7xl" />
+                  <CandidatePhoto candidate={c} className="w-48 shrink-0 text-7xl" />
+                  <div className="flex flex-1 flex-col justify-center gap-5 px-10">
+                    <div className="flex items-end justify-between gap-6">
+                      <div className="flex items-center gap-5">
+                        <span className="text-[68px] font-black leading-none">{c.name}</span>
+                        {leading && <span className="bc-red px-4 py-1.5 text-2xl font-black">1위</span>}
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="font-mono text-5xl font-semibold">
+                        <span className="whitespace-nowrap font-mono text-[44px] font-semibold text-ink-muted">
                           <CountUp value={c.votes} />
-                          <span className="ml-1 font-sans text-2xl text-muted-foreground">표</span>
+                          <span className="ml-1 font-sans text-2xl">표</span>
                         </span>
-                        <span className="w-48 text-right font-mono text-7xl font-bold" style={{ color: leading ? 'var(--gold)' : 'var(--foreground)' }}>
+                        <span className="min-w-56 whitespace-nowrap text-right font-mono text-[92px] font-bold leading-none" style={{ color: c.color }}>
                           <CountUp value={c.pct} decimals={1} />
-                          <span className="text-4xl">%</span>
+                          <span className="text-5xl">%</span>
                         </span>
                       </div>
                     </div>
-                    <div className="relative h-6 overflow-hidden bg-navy-deep">
-                      <div
-                        className="relative h-full overflow-hidden"
-                        style={{
-                          width: `${(c.pct / maxPct) * 100}%`,
-                          background: c.color,
-                          transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                        }}
-                      >
-                        <div className="absolute inset-y-0 w-1/4 bg-gradient-to-r from-transparent via-foreground/40 to-transparent" style={{ animation: 'bc-shine 2.4s ease-in-out infinite' }} />
-                      </div>
-                    </div>
+                    <ShareBar pct={c.pct} color={c.color} className="h-7" />
                   </div>
                 </li>
               )
@@ -120,34 +69,28 @@ export function LiveScene({ results }: SceneProps) {
           </ol>
         </section>
 
-        <aside className="bc-slide-right flex w-[520px] shrink-0 flex-col gap-6 bg-navy/90 p-8" aria-label="개표 진행 현황">
-          <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-black">개표 진행</h2>
+        <aside className="bc-glass bc-slide-right flex w-[500px] shrink-0 flex-col" aria-label="개표 진행 현황">
+          <div className="bc-blue px-9 py-5 text-3xl font-black">개표 진행 상황</div>
+          <div className="flex flex-col gap-5 px-9 pt-8">
+            <span className="text-2xl font-bold text-muted-foreground">개표율</span>
+            <span className="font-mono text-[132px] font-bold leading-none text-gold">
+              {stats.countRate === null ? '—' : <CountUp value={stats.countRate} decimals={1} />}
+              {stats.countRate !== null && <span className="text-6xl">%</span>}
+            </span>
+            <div className="h-4 overflow-hidden bg-navy-deep">
+              <div
+                className="h-full bg-gold"
+                style={{ width: `${stats.countRate ?? 0}%`, transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+              />
+            </div>
           </div>
-          <div className="flex justify-center">
-            <ProgressRing value={stats.countRate} label="개표율" />
-          </div>
-          <div className="flex flex-col">
+          <div className="mt-4 flex flex-col px-9">
             <Stat label="총 투표수" value={stats.totalBallots} />
             <Stat label="개표 완료" value={stats.counted} />
             <Stat label="남은 투표지" value={stats.remaining} />
             <Stat label="무효표" value={stats.invalid} />
             <Stat label="투표율" value={stats.turnout} suffix="%" />
           </div>
-          {stats.leader && stats.runnerUp && (
-            <div className="mt-auto flex flex-col gap-2 bg-navy-deep p-5">
-              <span className="text-xl font-bold text-muted-foreground">1·2위 격차</span>
-              <div className="flex items-baseline justify-between">
-                <span className="text-2xl font-bold">
-                  {stats.leader.name} - {stats.runnerUp.name}
-                </span>
-                <span className="font-mono text-5xl font-bold text-gold">
-                  <CountUp value={stats.margin} />
-                  <span className="ml-1 font-sans text-2xl">표</span>
-                </span>
-              </div>
-            </div>
-          )}
         </aside>
       </div>
     </div>

@@ -99,58 +99,58 @@ export function CandidatePhoto({
   )
 }
 
-export function Backdrop({ tone = 'navy' }: { tone?: 'navy' | 'gold' }) {
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            tone === 'gold'
-              ? 'radial-gradient(ellipse at 50% 35%, #2a2210 0%, #0a1020 50%, #03060e 100%)'
-              : 'radial-gradient(ellipse at 50% 30%, #0f2350 0%, #060d1f 55%, #03060e 100%)',
-        }}
-      />
-      <div className="bc-grid absolute inset-0 opacity-70" />
-      <div
-        className="absolute left-0 h-48 w-full opacity-40"
-        style={{
-          background: 'linear-gradient(to bottom, transparent, rgb(58 141 255 / 0.12), transparent)',
-          animation: 'bc-scan 7s linear infinite',
-        }}
-      />
-      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-background to-transparent" />
-    </div>
-  )
-}
-
-export function LightStreaks({ count = 6, color = 'var(--primary)' }: { count?: number; color?: string }) {
+export function StudioBackdrop({ dim = 0.55, tint }: { dim?: number; tint?: string }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      {Array.from({ length: count }).map((_, i) => (
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: 'url(/images/studio-bg.png)',
+          animation: 'bc-drift 40s ease-in-out infinite alternate',
+        }}
+      />
+      <div className="absolute inset-0" style={{ background: `rgb(5 11 28 / ${dim})` }} />
+      {tint && (
         <div
-          key={i}
-          className="absolute h-0.5"
-          style={{
-            top: `${12 + ((i * 37) % 76)}%`,
-            width: 420 + ((i * 113) % 380),
-            background: `linear-gradient(to right, transparent, ${color}, transparent)`,
-            animation: `bc-streak ${4 + (i % 3) * 1.3}s linear ${i * 0.7}s infinite`,
-          }}
+          className="absolute inset-0"
+          style={{ background: `radial-gradient(ellipse at 30% 40%, ${tint} 0%, transparent 60%)` }}
         />
-      ))}
+      )}
+      <div
+        className="absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse at center, transparent 45%, rgb(5 11 28 / 0.75) 100%)' }}
+      />
     </div>
   )
 }
 
-export function NumberBadge({ number, color, className }: { number: number; color: string; className?: string }) {
+export function NumberChip({ number, color, className }: { number: number; color: string; className?: string }) {
   return (
     <span
-      className={cn('inline-flex items-center gap-2 px-3 py-1 font-bold text-foreground', className)}
-      style={{ backgroundColor: color }}
+      className={cn('inline-flex shrink-0 items-center justify-center font-mono font-bold leading-none text-foreground', className)}
+      style={{ background: `linear-gradient(180deg, color-mix(in srgb, ${color} 80%, white), ${color} 55%, color-mix(in srgb, ${color} 75%, black))` }}
     >
-      <span className="text-[0.7em] font-medium opacity-90">기호</span>
-      <span className="font-mono">{number}</span>
+      {number}
     </span>
+  )
+}
+
+export function ShareBar({ pct, color, className }: { pct: number; color: string; className?: string }) {
+  return (
+    <div className={cn('relative overflow-hidden bg-ink/10', className)}>
+      <div
+        className="relative h-full overflow-hidden"
+        style={{
+          width: `${Math.max(0, Math.min(100, pct))}%`,
+          background: `linear-gradient(180deg, color-mix(in srgb, ${color} 75%, white), ${color} 50%, color-mix(in srgb, ${color} 80%, black))`,
+          transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        <div
+          className="absolute inset-y-0 w-1/5 bg-gradient-to-r from-transparent via-foreground/45 to-transparent"
+          style={{ animation: 'bc-shine 3s ease-in-out infinite' }}
+        />
+      </div>
+    </div>
   )
 }

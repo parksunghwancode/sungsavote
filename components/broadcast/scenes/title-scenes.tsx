@@ -1,124 +1,89 @@
 'use client'
 
-import { Backdrop, CandidatePhoto, LightStreaks } from '../primitives'
+import { ChannelLogo } from '../overlays'
+import { CandidatePhoto, NumberChip, StudioBackdrop } from '../primitives'
 import type { SceneProps } from './types'
 
-function Rings() {
-  return (
-    <svg
-      viewBox="0 0 1000 1000"
-      className="pointer-events-none absolute left-1/2 top-1/2 size-[1100px] -translate-x-1/2 -translate-y-1/2"
-      aria-hidden="true"
-    >
-      <g style={{ transformOrigin: '500px 500px', animation: 'bc-spin 60s linear infinite' }}>
-        <circle cx="500" cy="500" r="470" fill="none" stroke="var(--primary)" strokeOpacity="0.35" strokeWidth="2" strokeDasharray="2 14" />
-        <circle cx="500" cy="500" r="430" fill="none" stroke="var(--primary)" strokeOpacity="0.18" strokeWidth="1" />
-      </g>
-      <g style={{ transformOrigin: '500px 500px', animation: 'bc-spin-rev 40s linear infinite' }}>
-        <circle cx="500" cy="500" r="390" fill="none" stroke="var(--gold)" strokeOpacity="0.45" strokeWidth="3" strokeDasharray="120 60 8 60" />
-      </g>
-      <g style={{ transformOrigin: '500px 500px', animation: 'bc-spin 24s linear infinite' }}>
-        <circle cx="500" cy="500" r="340" fill="none" stroke="var(--foreground)" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="1 6" />
-      </g>
-    </svg>
-  )
-}
-
-function OpeningGraphic({ config, results }: SceneProps) {
+export function OpeningScene({ config, results }: SceneProps) {
   const title = results.title || config.electionTitle
-  const chars = Array.from(title)
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <Backdrop />
-      <LightStreaks count={8} />
-      <Rings />
-      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-8 text-center">
-        <div className="bc-rise flex items-center gap-4 border border-live/60 bg-live/15 px-6 py-2 text-2xl font-bold tracking-[0.3em] text-foreground">
-          <span className="bc-pulse size-3 rounded-full bg-live" />
-          LIVE · 특집 개표방송
-        </div>
-        <p className="bc-rise text-4xl font-bold tracking-[0.4em] text-muted-foreground" style={{ animationDelay: '0.2s' }}>
-          {config.schoolName}
-        </p>
-        <h1 className="flex flex-wrap justify-center text-[150px] font-black leading-none tracking-tight">
-          {chars.map((ch, i) => (
-            <span key={i} className="bc-rise inline-block whitespace-pre" style={{ animationDelay: `${0.4 + i * 0.05}s` }}>
-              {ch}
+      <StudioBackdrop dim={0.35} />
+      <div className="relative z-10 flex h-full flex-col items-center justify-center">
+        <ChannelLogo className="bc-rise h-24 shadow-2xl shadow-black/50" />
+
+        <div className="mt-12 flex flex-col items-stretch shadow-[0_40px_80px_-20px_rgb(0_0_0/0.7)]">
+          <div className="bc-wipe flex items-center justify-between" style={{ animationDelay: '0.35s' }}>
+            <span className="bc-red flex items-center gap-3 px-6 py-2 text-2xl font-black">
+              <span className="bc-pulse size-3 rounded-full bg-foreground" />
+              LIVE 특집
             </span>
-          ))}
-        </h1>
-        <div className="bc-wipe flex items-center gap-8" style={{ animationDelay: '1.3s' }}>
-          <span className="h-1 w-40 bg-gold" />
-          <span className="text-[96px] font-black leading-none text-gold">개표방송</span>
-          <span className="h-1 w-40 bg-gold" />
+          </div>
+          <div className="bc-panel bc-wipe flex flex-col items-center gap-3 px-24 py-12" style={{ animationDelay: '0.5s' }}>
+            <span className="text-4xl font-bold tracking-[0.35em] text-ink-muted">{config.schoolName}</span>
+            <h1 className="text-balance text-center text-[140px] font-black leading-none tracking-tight">{title}</h1>
+          </div>
+          <div className="bc-blue bc-wipe flex items-center justify-center py-5" style={{ animationDelay: '0.8s' }}>
+            <span className="text-[72px] font-black leading-none tracking-[0.3em]">개표방송</span>
+          </div>
         </div>
-        <p className="bc-rise mt-6 text-3xl font-medium text-muted-foreground" style={{ animationDelay: '1.8s' }}>
-          <span className="bc-pulse">잠시 후 개표가 시작됩니다</span>
+
+        <p className="bc-rise mt-16 text-4xl font-bold text-foreground/85" style={{ animationDelay: '1.4s' }}>
+          잠시 후 개표 현황을 전해드립니다
         </p>
       </div>
     </div>
   )
 }
 
-export function OpeningScene(props: SceneProps) {
-  return <OpeningGraphic {...props} />
-}
-
-function EndingGraphic({ config, results }: SceneProps) {
-  const credits = config.credits
+export function EndingScene({ config, results }: SceneProps) {
   const winner = results.stats.leader
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <Backdrop />
-      <LightStreaks count={5} color="var(--gold)" />
-      <div className="relative z-10 grid h-full grid-cols-2 items-center gap-16 px-32">
-        <div className="flex flex-col gap-8">
-          <p className="bc-rise text-3xl font-bold tracking-[0.3em] text-primary">{config.schoolName}</p>
-          <h1 className="bc-rise text-[120px] font-black leading-[1.05]" style={{ animationDelay: '0.15s' }}>
+      <StudioBackdrop dim={0.5} />
+      <div className="relative z-10 flex h-full items-center gap-20 px-32 pt-20">
+        <div className="flex flex-1 flex-col gap-10">
+          <p className="bc-rise text-3xl font-bold tracking-[0.3em] text-foreground/80">{config.schoolName}</p>
+          <h1 className="bc-rise text-[124px] font-black leading-[1.05]" style={{ animationDelay: '0.15s' }}>
             시청해 주셔서
             <br />
-            <span className="text-gold">감사합니다</span>
+            감사합니다
           </h1>
           {winner && (
-            <div className="bc-rise flex items-center gap-6 border-l-4 border-gold bg-navy/80 p-6" style={{ animationDelay: '0.5s' }}>
-              <CandidatePhoto candidate={winner} className="size-28 shrink-0 text-5xl" />
-              <div className="flex flex-col gap-1">
-                <span className="text-2xl font-bold text-muted-foreground">{config.electionTitle} 당선인</span>
-                <span className="text-5xl font-black">
-                  기호 {winner.number}번 {winner.name}
+            <div className="bc-panel bc-slide-left flex w-fit items-stretch" style={{ animationDelay: '0.45s' }}>
+              <CandidatePhoto candidate={winner} className="size-36 shrink-0 text-6xl" />
+              <div className="flex flex-col justify-center gap-2 px-8">
+                <span className="text-2xl font-bold text-ink-muted">{config.electionTitle} 당선인</span>
+                <span className="flex items-center gap-4 text-6xl font-black">
+                  <NumberChip number={winner.number} color={winner.color} className="size-14 text-4xl" />
+                  {winner.name}
                 </span>
               </div>
             </div>
           )}
         </div>
-        <div className="relative h-[760px] overflow-hidden" style={{ maskImage: 'linear-gradient(transparent, black 18%, black 82%, transparent)' }}>
-          <div
-            className="flex flex-col items-center gap-10 pt-[760px] text-center"
-            style={{ animation: `bc-credits ${Math.max(16, credits.length * 4)}s linear infinite` }}
-          >
-            {credits.map((line, i) => {
+
+        <div className="bc-glass bc-slide-right flex w-[620px] flex-col" style={{ animationDelay: '0.3s' }}>
+          <div className="bc-blue px-10 py-5 text-3xl font-black">함께한 사람들</div>
+          <ul className="flex flex-col px-10 py-4">
+            {config.credits.map((line, i) => {
               const [role, name] = line.split('|').map((s) => s.trim())
               return (
-                <div key={i} className="flex flex-col gap-2">
+                <li key={i} className="flex items-center justify-between gap-6 border-b border-border py-6 last:border-0">
                   {name ? (
                     <>
-                      <span className="text-2xl font-medium tracking-[0.3em] text-muted-foreground">{role}</span>
-                      <span className="text-5xl font-black">{name}</span>
+                      <span className="text-2xl font-bold text-muted-foreground">{role}</span>
+                      <span className="text-right text-4xl font-black">{name}</span>
                     </>
                   ) : (
-                    <span className="text-4xl font-bold">{role}</span>
+                    <span className="text-pretty text-3xl font-bold leading-snug">{role}</span>
                   )}
-                </div>
+                </li>
               )
             })}
-            <span className="pt-10 font-mono text-3xl font-semibold tracking-[0.4em] text-gold">ELECTION NIGHT 2026</span>
-          </div>
+          </ul>
         </div>
       </div>
     </div>
   )
-}
-
-export function EndingScene(props: SceneProps) {
-  return <EndingGraphic {...props} />
 }
