@@ -10,13 +10,11 @@ import { InterimScene } from './scenes/interim-scene'
 import { LiveScene } from './scenes/live-scene'
 import { EndingScene, OpeningScene } from './scenes/title-scenes'
 import type { SceneProps } from './scenes/types'
-import { VideoScene } from './scenes/video-scene'
 import { WinnerScene } from './scenes/winner-scene'
 
-const SCENE_COMPONENTS: Record<SceneKey, (props: SceneProps & { candidateNumber?: number }) => React.ReactNode> = {
+const SCENE_COMPONENTS: Record<SceneKey, (props: SceneProps) => React.ReactNode> = {
   opening: OpeningScene,
   candidates: CandidatesScene,
-  video: VideoScene,
   live: LiveScene,
   interim: InterimScene,
   winner: WinnerScene,
@@ -43,9 +41,9 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
   return (
     <div className="bc-respect-motion absolute inset-0">
       <div key={slide.id} className="absolute inset-0">
-        <Scene config={BROADCAST_CONFIG} results={results} candidateNumber={slide.candidateNumber} />
+        <Scene config={BROADCAST_CONFIG} results={results} />
       </div>
-      {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.key === 'video' ? '후보 영상' : slide.label} />}
+      {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.label} />}
       {showTicker && <Ticker config={BROADCAST_CONFIG} results={results} />}
       <SceneTransition triggerKey={transitionKey} />
     </div>

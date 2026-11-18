@@ -1,6 +1,6 @@
-export type SceneKey = 'opening' | 'candidates' | 'video' | 'live' | 'interim' | 'winner' | 'ending'
+export type SceneKey = 'opening' | 'candidates' | 'live' | 'interim' | 'winner' | 'ending'
 
-export const SCENES: { key: Exclude<SceneKey, 'video'>; label: string }[] = [
+export const SCENES: { key: SceneKey; label: string }[] = [
   { key: 'opening', label: '오프닝' },
   { key: 'candidates', label: '후보자 소개' },
   { key: 'live', label: '실시간 개표 현황' },
@@ -13,25 +13,10 @@ export interface Slide {
   id: string
   key: SceneKey
   label: string
-  candidateNumber?: number
 }
 
-export function buildSlides(candidates: { number: number; name: string }[]): Slide[] {
-  const slides: Slide[] = []
-  for (const scene of SCENES) {
-    slides.push({ id: scene.key, key: scene.key, label: scene.label })
-    if (scene.key === 'candidates') {
-      for (const c of candidates) {
-        slides.push({
-          id: `video-${c.number}`,
-          key: 'video',
-          label: `기호 ${c.number}번 ${c.name} 영상`,
-          candidateNumber: c.number,
-        })
-      }
-    }
-  }
-  return slides
+export function buildSlides(): Slide[] {
+  return SCENES.map((scene) => ({ id: scene.key, key: scene.key, label: scene.label }))
 }
 
 export interface Candidate {
@@ -62,7 +47,6 @@ export interface CandidateView extends Candidate {
   pct: number
   color: string
   photoUrl: string | null
-  videoUrl: string
 }
 
 export interface ResultStats {

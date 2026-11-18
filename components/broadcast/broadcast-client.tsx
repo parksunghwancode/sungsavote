@@ -12,9 +12,7 @@ const PREV_KEYS = new Set(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'])
 
 export function BroadcastClient() {
   const results = useResults()
-  const candidateKey = results.candidates.map((c) => `${c.number}:${c.name}`).join('|')
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const SCENES = useMemo(() => buildSlides(results.candidates), [candidateKey])
+  const SCENES = useMemo(() => buildSlides(), [])
   const countRef = useRef(SCENES.length)
   countRef.current = SCENES.length
 

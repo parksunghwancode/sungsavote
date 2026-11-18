@@ -1,6 +1,6 @@
 'use client'
 
-import { ChannelLogo, SchoolEmblem } from '../overlays'
+import { ChannelLogo, SchoolLogo } from '../overlays'
 import { CandidatePhoto, NumberChip, StudioBackdrop } from '../primitives'
 import type { SceneProps } from './types'
 
@@ -19,8 +19,8 @@ export function OpeningScene({ config, results }: SceneProps) {
               LIVE 특집
             </span>
           </div>
-          <div className="bc-panel bc-wipe flex items-center gap-10 px-20 py-12" style={{ animationDelay: '0.5s' }}>
-            <SchoolEmblem className="size-40" />
+          <div className="bc-panel bc-wipe flex flex-col items-center gap-8 px-20 py-12" style={{ animationDelay: '0.5s' }}>
+            <SchoolLogo className="h-20" />
             <h1 className="max-w-[1300px] text-balance break-keep text-[104px] font-black leading-[1.08] tracking-tight">{title}</h1>
           </div>
           <div className="bc-blue bc-wipe flex items-center justify-center py-5" style={{ animationDelay: '0.8s' }}>
@@ -43,10 +43,7 @@ export function EndingScene({ config, results }: SceneProps) {
       <StudioBackdrop dim={0.5} />
       <div className="relative z-10 flex h-full items-center gap-20 px-32 pt-20">
         <div className="flex flex-1 flex-col gap-10">
-          <p className="bc-rise flex items-center gap-5 text-3xl font-bold tracking-[0.2em] text-foreground/80">
-            <SchoolEmblem className="size-16 rounded-sm" />
-            {config.schoolName}
-          </p>
+          <SchoolLogo onDark className="bc-rise h-16 self-start" />
           <h1 className="bc-rise text-[124px] font-black leading-[1.05]" style={{ animationDelay: '0.15s' }}>
             시청해 주셔서
             <br />
