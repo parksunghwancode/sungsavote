@@ -60,10 +60,13 @@ export async function GET(request: NextRequest) {
     const candidatesSheet = (params.get('candidates') ?? '').slice(0, 100)
     const settingsSheet = (params.get('settings') ?? '').slice(0, 100)
 
-    const [candidateRows, settingRows] = await Promise.all([
+    const [candidateRows, fetchedSettingRows] = await Promise.all([
       fetchSheetCsv(sheetId, candidatesSheet),
       settingsSheet ? fetchSheetCsv(sheetId, settingsSheet).catch(() => []) : Promise.resolve([]),
     ])
+    // Google returns the first tab when the named tab does not exist; ignore that copy.
+    const sameAsCandidates = fetchedSettingRows[0]?.join('\u0000') === candidateRows[0]?.join('\u0000')
+    const settingRows = sameAsCandidates ? [] : fetchedSettingRows
 
     const payload: ResultsData = {
       candidates: rowsToCandidates(candidateRows),

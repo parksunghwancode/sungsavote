@@ -1,8 +1,9 @@
 'use client'
 
 import { ChevronLeft, ChevronRight, Maximize } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
-import { SCENES } from '@/lib/types'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useResults } from '@/hooks/use-results'
+import { buildSlides } from '@/lib/types'
 import { BroadcastView } from './broadcast-view'
 import { Stage } from './primitives'
 
@@ -10,11 +11,19 @@ const NEXT_KEYS = new Set(['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'])
 const PREV_KEYS = new Set(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'])
 
 export function BroadcastClient() {
-  const [index, setIndex] = useState(0)
+  const results = useResults()
+  const candidateKey = results.candidates.map((c) => `${c.number}:${c.name}`).join('|')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const SCENES = useMemo(() => buildSlides(results.candidates), [candidateKey])
+  const countRef = useRef(SCENES.length)
+  countRef.current = SCENES.length
+
+  const [rawIndex, setIndex] = useState(0)
+  const index = Math.min(rawIndex, SCENES.length - 1)
   const [fullscreen, setFullscreen] = useState(false)
 
   const go = useCallback((delta: number) => {
-    setIndex((i) => Math.min(SCENES.length - 1, Math.max(0, i + delta)))
+    setIndex((i) => Math.min(countRef.current - 1, Math.max(0, i + delta)))
   }, [])
 
   const enterFullscreen = () => {
@@ -32,7 +41,7 @@ export function BroadcastClient() {
         e.preventDefault()
         go(-1)
       } else if (e.key === 'Home') setIndex(0)
-      else if (e.key === 'End') setIndex(SCENES.length - 1)
+      else if (e.key === 'End') setIndex(countRef.current - 1)
       else if (e.key === 'f' || e.key === 'F') {
         if (document.fullscreenElement) void document.exitFullscreen()
         else enterFullscreen()
@@ -55,7 +64,7 @@ export function BroadcastClient() {
         {`${index + 1}번째 화면: ${current.label}`}
       </p>
       <Stage>
-        <BroadcastView scene={current.key} />
+        <BroadcastView slide={current} results={results} />
       </Stage>
 
       {!fullscreen && (

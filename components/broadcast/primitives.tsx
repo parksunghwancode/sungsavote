@@ -64,6 +64,31 @@ export function CountUp({
   )
 }
 
+export function useRiseEvent(value: number) {
+  const prev = useRef(value)
+  const [event, setEvent] = useState<{ id: number; delta: number } | null>(null)
+  useEffect(() => {
+    const delta = value - prev.current
+    prev.current = value
+    if (delta > 0) setEvent((e) => ({ id: (e?.id ?? 0) + 1, delta }))
+  }, [value])
+  return event
+}
+
+export function RiseBadge({ event, color }: { event: { id: number; delta: number } | null; color: string }) {
+  if (!event) return null
+  return (
+    <span
+      key={event.id}
+      className="bc-rise-badge pointer-events-none absolute -top-2 right-0 whitespace-nowrap px-3 py-1 font-mono text-3xl font-bold text-foreground"
+      style={{ background: color }}
+      aria-hidden="true"
+    >
+      {`+${event.delta.toLocaleString('ko-KR')}`}
+    </span>
+  )
+}
+
 export function CandidatePhoto({
   candidate,
   className,

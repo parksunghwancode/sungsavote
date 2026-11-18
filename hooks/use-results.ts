@@ -1,7 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { BROADCAST_CONFIG, DEFAULT_CANDIDATES } from '@/lib/config'
+import { BROADCAST_CONFIG, DEFAULT_CANDIDATES, defaultVideoFor } from '@/lib/config'
 import type { CandidateView, ResultStats, ResultsData } from '@/lib/types'
 
 export const FALLBACK_COLORS = ['#2F6BFF', '#E5383B', '#12A37B', '#FF7A1A', '#9B6BFF', '#14B8C4']
@@ -13,7 +13,10 @@ async function fetchResults(url: string): Promise<ResultsData> {
   return json
 }
 
-const RESULTS_URL = `/api/results?${new URLSearchParams({ sheet: BROADCAST_CONFIG.sheetUrl })}`
+const RESULTS_URL = `/api/results?${new URLSearchParams({
+  sheet: BROADCAST_CONFIG.sheetUrl,
+  settings: BROADCAST_CONFIG.settingsSheet,
+})}`
 
 export function useResults() {
   const { data } = useSWR(RESULTS_URL, fetchResults, {
@@ -29,6 +32,7 @@ export function useResults() {
     ...c,
     color: c.color || FALLBACK_COLORS[i % FALLBACK_COLORS.length],
     photoUrl: c.photo ?? null,
+    videoUrl: c.video ?? defaultVideoFor(c.number),
     rank: 0,
     pct: 0,
   }))

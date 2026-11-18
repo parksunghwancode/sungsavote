@@ -1,7 +1,53 @@
 'use client'
 
-import { CandidatePhoto, CountUp, NumberChip, ShareBar, StudioBackdrop } from '../primitives'
+import type { CandidateView } from '@/lib/types'
+import { CandidatePhoto, CountUp, NumberChip, RiseBadge, ShareBar, StudioBackdrop, useRiseEvent } from '../primitives'
 import type { SceneProps } from './types'
+
+function CandidateRow({ candidate: c, index }: { candidate: CandidateView & { rank: number }; index: number }) {
+  const rise = useRiseEvent(c.votes)
+  const leading = c.rank === 1 && c.votes > 0
+  return (
+    <li
+      className="bc-panel bc-slide-left relative flex flex-1 items-stretch overflow-hidden"
+      style={{ animationDelay: `${0.1 + index * 0.12}s` }}
+    >
+      {rise && (
+        <span
+          key={`flash-${rise.id}`}
+          className="bc-row-flash pointer-events-none absolute inset-0 z-10"
+          style={{ background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${c.color} 28%, transparent), transparent)` }}
+          aria-hidden="true"
+        />
+      )}
+      <NumberChip number={c.number} color={c.color} className="w-28 text-7xl" />
+      <CandidatePhoto candidate={c} className="w-48 shrink-0 text-7xl" />
+      <div className="flex flex-1 flex-col justify-center gap-5 px-10">
+        <div className="flex items-end justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <span className="text-[68px] font-black leading-none">{c.name}</span>
+            {leading && <span className="bc-red px-4 py-1.5 text-2xl font-black">1위</span>}
+          </div>
+          <div className="flex items-baseline gap-6">
+            <span
+              key={rise ? `votes-${rise.id}` : 'votes'}
+              className={`relative whitespace-nowrap font-mono text-[44px] font-semibold text-ink-muted ${rise ? 'bc-vote-pop' : ''}`}
+            >
+              <RiseBadge event={rise} color={c.color} />
+              <CountUp value={c.votes} />
+              <span className="ml-1 font-sans text-2xl">표</span>
+            </span>
+            <span className="min-w-56 whitespace-nowrap text-right font-mono text-[92px] font-bold leading-none" style={{ color: c.color }}>
+              <CountUp value={c.pct} decimals={1} />
+              <span className="text-5xl">%</span>
+            </span>
+          </div>
+        </div>
+        <ShareBar pct={c.pct} color={c.color} className="h-7" />
+      </div>
+    </li>
+  )
+}
 
 function Stat({ label, value, suffix = '표' }: { label: string; value: number | null; suffix?: string }) {
   return (
@@ -34,38 +80,9 @@ export function LiveScene({ results }: SceneProps) {
             {updated && <span className="text-2xl font-bold text-foreground/70">{updated} 현재</span>}
           </div>
           <ol className="flex flex-1 flex-col gap-4">
-            {ranked.map((c, i) => {
-              const leading = c.rank === 1 && c.votes > 0
-              return (
-                <li
-                  key={c.number}
-                  className="bc-panel bc-slide-left relative flex flex-1 items-stretch overflow-hidden"
-                  style={{ animationDelay: `${0.1 + i * 0.12}s` }}
-                >
-                  <NumberChip number={c.number} color={c.color} className="w-28 text-7xl" />
-                  <CandidatePhoto candidate={c} className="w-48 shrink-0 text-7xl" />
-                  <div className="flex flex-1 flex-col justify-center gap-5 px-10">
-                    <div className="flex items-end justify-between gap-6">
-                      <div className="flex items-center gap-5">
-                        <span className="text-[68px] font-black leading-none">{c.name}</span>
-                        {leading && <span className="bc-red px-4 py-1.5 text-2xl font-black">1위</span>}
-                      </div>
-                      <div className="flex items-baseline gap-6">
-                        <span className="whitespace-nowrap font-mono text-[44px] font-semibold text-ink-muted">
-                          <CountUp value={c.votes} />
-                          <span className="ml-1 font-sans text-2xl">표</span>
-                        </span>
-                        <span className="min-w-56 whitespace-nowrap text-right font-mono text-[92px] font-bold leading-none" style={{ color: c.color }}>
-                          <CountUp value={c.pct} decimals={1} />
-                          <span className="text-5xl">%</span>
-                        </span>
-                      </div>
-                    </div>
-                    <ShareBar pct={c.pct} color={c.color} className="h-7" />
-                  </div>
-                </li>
-              )
-            })}
+            {ranked.map((c, i) => (
+              <CandidateRow key={c.number} candidate={c} index={i} />
+            ))}
           </ol>
         </section>
 

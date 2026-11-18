@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import type { BroadcastConfig } from '@/lib/config'
 import type { ResultsState } from '@/hooks/use-results'
-import { SCENES, type SceneKey } from '@/lib/types'
 
 function useClock() {
   const [now, setNow] = useState<Date | null>(null)
@@ -30,9 +29,8 @@ export function ChannelLogo({ className = '' }: { className?: string }) {
   )
 }
 
-export function HeaderBug({ config, scene }: { config: BroadcastConfig; scene: SceneKey }) {
+export function HeaderBug({ config, label }: { config: BroadcastConfig; label: string }) {
   const now = useClock()
-  const label = SCENES.find((s) => s.key === scene)?.label
   return (
     <header className="absolute inset-x-12 top-10 z-30 flex h-[84px] items-stretch justify-between">
       <div className="bc-slide-left flex items-stretch shadow-2xl shadow-black/50">

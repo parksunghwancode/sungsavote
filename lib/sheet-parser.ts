@@ -51,12 +51,21 @@ export function normalizePhotoUrl(url: string | undefined): string | undefined {
   return undefined
 }
 
+export function normalizeVideoUrl(url: string | undefined): string | undefined {
+  const value = url?.trim()
+  if (!value) return undefined
+  if (/^https?:\/\//.test(value) || value.startsWith('/')) return value
+  if (/^[\w.-]+\.(mp4|webm|mov)$/i.test(value)) return `/videos/${value}`
+  return undefined
+}
+
 const COLUMN_MATCHERS: Record<keyof Omit<Candidate, 'votes'> | 'votes', RegExp> = {
   number: /기호|번호|no/i,
   name: /이름|성명|후보|name/i,
   slogan: /소개|슬로건|공약|구호|slogan/i,
   votes: /득표|표수|votes?/i,
   photo: /사진|이미지|photo|image/i,
+  video: /영상|동영상|video/i,
   color: /색|color/i,
 }
 
@@ -68,7 +77,7 @@ export function rowsToCandidates(rows: string[][]): Candidate[] {
   const fallbackOrder = ['number', 'name', 'slogan', 'votes', 'photo', 'color'] as const
   const index: Record<string, number> = {}
   if (hasHeader) {
-    for (const key of ['votes', 'number', 'photo', 'color', 'slogan', 'name'] as const) {
+    for (const key of ['votes', 'number', 'video', 'photo', 'color', 'slogan', 'name'] as const) {
       const found = header.findIndex(
         (h, i) => COLUMN_MATCHERS[key].test(h) && !Object.values(index).includes(i),
       )
@@ -91,6 +100,7 @@ export function rowsToCandidates(rows: string[][]): Candidate[] {
       slogan: index.slogan !== undefined ? (row[index.slogan] ?? '').trim() : '',
       votes: Math.max(0, (index.votes !== undefined ? toNumber(row[index.votes]) : 0) ?? 0),
       photo: index.photo !== undefined ? normalizePhotoUrl(row[index.photo]) : undefined,
+      video: index.video !== undefined ? normalizeVideoUrl(row[index.video]) : undefined,
       color: /^#?[0-9a-f]{3,8}$/i.test(color ?? '') ? (color!.startsWith('#') ? color : `#${color}`) : undefined,
     })
   })

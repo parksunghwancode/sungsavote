@@ -1,21 +1,38 @@
-export type SceneKey = 'opening' | 'candidates' | 'live' | 'interim' | 'winner' | 'ending'
-export type VideoSceneKey = Exclude<SceneKey, 'live'>
+export type SceneKey = 'opening' | 'candidates' | 'video' | 'live' | 'interim' | 'winner' | 'ending'
 
-export const SCENES: { key: SceneKey; label: string; short: string; hasVideo: boolean }[] = [
-  { key: 'opening', label: '오프닝', short: 'OPENING', hasVideo: true },
-  { key: 'candidates', label: '후보자 소개', short: 'CANDIDATES', hasVideo: true },
-  { key: 'live', label: '실시간 개표 현황', short: 'LIVE COUNT', hasVideo: false },
-  { key: 'interim', label: '개표 중간 방송', short: 'INTERIM', hasVideo: true },
-  { key: 'winner', label: '당선자 발표', short: 'WINNER', hasVideo: true },
-  { key: 'ending', label: '방송 종료', short: 'ENDING', hasVideo: true },
+export const SCENES: { key: Exclude<SceneKey, 'video'>; label: string }[] = [
+  { key: 'opening', label: '오프닝' },
+  { key: 'candidates', label: '후보자 소개' },
+  { key: 'live', label: '실시간 개표 현황' },
+  { key: 'interim', label: '개표 중간 방송' },
+  { key: 'winner', label: '당선자 발표' },
+  { key: 'ending', label: '방송 종료' },
 ]
 
-export const VIDEO_SCENES = SCENES.filter((s) => s.hasVideo) as {
-  key: VideoSceneKey
+export interface Slide {
+  id: string
+  key: SceneKey
   label: string
-  short: string
-  hasVideo: true
-}[]
+  candidateNumber?: number
+}
+
+export function buildSlides(candidates: { number: number; name: string }[]): Slide[] {
+  const slides: Slide[] = []
+  for (const scene of SCENES) {
+    slides.push({ id: scene.key, key: scene.key, label: scene.label })
+    if (scene.key === 'candidates') {
+      for (const c of candidates) {
+        slides.push({
+          id: `video-${c.number}`,
+          key: 'video',
+          label: `기호 ${c.number}번 ${c.name} 영상`,
+          candidateNumber: c.number,
+        })
+      }
+    }
+  }
+  return slides
+}
 
 export interface Candidate {
   number: number
@@ -23,6 +40,7 @@ export interface Candidate {
   slogan: string
   votes: number
   photo?: string
+  video?: string
   color?: string
 }
 
@@ -44,6 +62,7 @@ export interface CandidateView extends Candidate {
   pct: number
   color: string
   photoUrl: string | null
+  videoUrl: string
 }
 
 export interface ResultStats {

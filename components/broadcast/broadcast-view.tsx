@@ -1,50 +1,51 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useResults } from '@/hooks/use-results'
+import type { ResultsState } from '@/hooks/use-results'
 import { BROADCAST_CONFIG } from '@/lib/config'
-import type { SceneKey } from '@/lib/types'
+import type { SceneKey, Slide } from '@/lib/types'
 import { HeaderBug, SceneTransition, Ticker } from './overlays'
 import { CandidatesScene } from './scenes/candidates-scene'
 import { InterimScene } from './scenes/interim-scene'
 import { LiveScene } from './scenes/live-scene'
 import { EndingScene, OpeningScene } from './scenes/title-scenes'
 import type { SceneProps } from './scenes/types'
+import { VideoScene } from './scenes/video-scene'
 import { WinnerScene } from './scenes/winner-scene'
 
-const SCENE_COMPONENTS: Record<SceneKey, (props: SceneProps) => React.ReactNode> = {
+const SCENE_COMPONENTS: Record<SceneKey, (props: SceneProps & { candidateNumber?: number }) => React.ReactNode> = {
   opening: OpeningScene,
   candidates: CandidatesScene,
+  video: VideoScene,
   live: LiveScene,
   interim: InterimScene,
   winner: WinnerScene,
   ending: EndingScene,
 }
 
-export function BroadcastView({ scene: targetScene }: { scene: SceneKey }) {
-  const results = useResults()
-  const [scene, setScene] = useState<SceneKey>(targetScene)
+export function BroadcastView({ slide: target, results }: { slide: Slide; results: ResultsState }) {
+  const [slide, setSlide] = useState<Slide>(target)
   const [transitionKey, setTransitionKey] = useState(0)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
-    if (targetScene === scene) return
+    if (target.id === slide.id) return
     setTransitionKey((k) => k + 1)
     clearTimeout(timer.current)
-    timer.current = setTimeout(() => setScene(targetScene), 520)
+    timer.current = setTimeout(() => setSlide(target), 520)
     return () => clearTimeout(timer.current)
-  }, [targetScene, scene])
+  }, [target, slide.id])
 
-  const Scene = SCENE_COMPONENTS[scene]
-  const showChrome = scene !== 'opening'
-  const showTicker = scene === 'live' || scene === 'interim' || scene === 'candidates'
+  const Scene = SCENE_COMPONENTS[slide.key]
+  const showChrome = slide.key !== 'opening'
+  const showTicker = slide.key === 'live' || slide.key === 'interim' || slide.key === 'candidates'
 
   return (
     <div className="bc-respect-motion absolute inset-0">
-      <div key={scene} className="absolute inset-0">
-        <Scene config={BROADCAST_CONFIG} results={results} />
+      <div key={slide.id} className="absolute inset-0">
+        <Scene config={BROADCAST_CONFIG} results={results} candidateNumber={slide.candidateNumber} />
       </div>
-      {showChrome && <HeaderBug config={BROADCAST_CONFIG} scene={scene} />}
+      {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.key === 'video' ? '후보 영상' : slide.label} />}
       {showTicker && <Ticker config={BROADCAST_CONFIG} results={results} />}
       <SceneTransition triggerKey={transitionKey} />
     </div>
