@@ -102,11 +102,10 @@ export function LiveScene({ results }: SceneProps) {
             </div>
           </div>
           <div className="mt-4 flex flex-col px-9">
-            <Stat label="총 투표수" value={stats.totalBallots} />
+            <Stat label="선거인수" value={stats.eligible} />
             <Stat label="개표 완료" value={stats.counted} />
             <Stat label="남은 투표지" value={stats.remaining} />
             <Stat label="무효표" value={stats.invalid} />
-            <Stat label="투표율" value={stats.turnout} suffix="%" />
           </div>
         </aside>
       </div>

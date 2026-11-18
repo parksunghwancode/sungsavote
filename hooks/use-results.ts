@@ -46,19 +46,18 @@ export function useResults() {
   const candidates = [...list].sort((a, b) => a.number - b.number)
   const ranked = sorted
   const invalid = data?.invalidVotes ?? 0
-  const counted = data?.countedBallots ?? validVotes + invalid
-  const totalBallots = data?.totalBallots ?? null
+  const counted = validVotes + invalid
   const eligible = data?.eligibleVoters ?? null
 
   const stats: ResultStats = {
     validVotes,
     counted,
-    totalBallots,
-    countRate: totalBallots ? Math.min(100, (counted / totalBallots) * 100) : null,
+    totalBallots: eligible,
+    countRate: eligible ? Math.min(100, (counted / eligible) * 100) : null,
     invalid,
     eligible,
-    turnout: eligible && totalBallots ? Math.min(100, (totalBallots / eligible) * 100) : null,
-    remaining: totalBallots ? Math.max(0, totalBallots - counted) : null,
+    turnout: null,
+    remaining: eligible ? Math.max(0, eligible - counted) : null,
     margin: ranked[0] && ranked[1] ? ranked[0].votes - ranked[1].votes : 0,
     leader: ranked[0] && ranked[0].votes > 0 ? ranked[0] : null,
     runnerUp: ranked[1] ?? null,

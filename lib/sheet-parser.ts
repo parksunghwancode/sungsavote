@@ -133,9 +133,7 @@ export function rowsToSettings(rows: string[][]): SheetSettings {
     const value = toNumber(raw)
     if (value === null) continue
     if (/무효/.test(key)) settings.invalidVotes = value
-    else if (/개표/.test(key)) settings.countedBallots = value
     else if (/선거인|유권자|재학생/.test(key)) settings.eligibleVoters = value
-    else if (/투표/.test(key)) settings.totalBallots = value
   }
   return settings
 }

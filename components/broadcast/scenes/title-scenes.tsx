@@ -63,25 +63,31 @@ export function EndingScene({ config, results }: SceneProps) {
           )}
         </div>
 
-        <div className="bc-glass bc-slide-right flex w-[620px] flex-col" style={{ animationDelay: '0.3s' }}>
-          <div className="bc-blue px-10 py-5 text-3xl font-black">함께한 사람들</div>
-          <ul className="flex flex-col px-10 py-4">
+        <div
+          className="bc-fade relative h-[780px] w-[640px] shrink-0 overflow-hidden"
+          style={{ maskImage: 'linear-gradient(transparent, black 18%, black 82%, transparent)', animationDelay: '0.3s' }}
+        >
+          <div
+            className="flex flex-col items-center gap-12 pt-[780px] text-center"
+            style={{ animation: `bc-credits ${Math.max(16, config.credits.length * 4)}s linear infinite` }}
+          >
             {config.credits.map((line, i) => {
               const [role, name] = line.split('|').map((s) => s.trim())
               return (
-                <li key={i} className="flex items-center justify-between gap-6 border-b border-border py-6 last:border-0">
+                <div key={i} className="flex flex-col gap-3">
                   {name ? (
                     <>
-                      <span className="text-2xl font-bold text-muted-foreground">{role}</span>
-                      <span className="text-right text-4xl font-black">{name}</span>
+                      <span className="text-2xl font-bold tracking-[0.3em] text-muted-foreground">{role}</span>
+                      <span className="text-5xl font-black">{name}</span>
                     </>
                   ) : (
-                    <span className="text-pretty text-3xl font-bold leading-snug">{role}</span>
+                    <span className="text-balance text-4xl font-bold leading-snug">{role}</span>
                   )}
-                </li>
+                </div>
               )
             })}
-          </ul>
+            <span className="pt-10 font-mono text-3xl font-semibold tracking-[0.4em] text-gold">ELECTION NIGHT 2026</span>
+          </div>
         </div>
       </div>
     </div>
