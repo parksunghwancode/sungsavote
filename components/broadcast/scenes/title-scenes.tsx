@@ -1,6 +1,6 @@
 'use client'
 
-import { ChannelLogo } from '../overlays'
+import { ChannelLogo, SchoolEmblem } from '../overlays'
 import { CandidatePhoto, NumberChip, StudioBackdrop } from '../primitives'
 import type { SceneProps } from './types'
 
@@ -19,9 +19,9 @@ export function OpeningScene({ config, results }: SceneProps) {
               LIVE 특집
             </span>
           </div>
-          <div className="bc-panel bc-wipe flex flex-col items-center gap-3 px-24 py-12" style={{ animationDelay: '0.5s' }}>
-            <span className="text-4xl font-bold tracking-[0.35em] text-ink-muted">{config.schoolName}</span>
-            <h1 className="text-balance text-center text-[140px] font-black leading-none tracking-tight">{title}</h1>
+          <div className="bc-panel bc-wipe flex items-center gap-10 px-20 py-12" style={{ animationDelay: '0.5s' }}>
+            <SchoolEmblem className="size-40" />
+            <h1 className="max-w-[1300px] text-balance break-keep text-[104px] font-black leading-[1.08] tracking-tight">{title}</h1>
           </div>
           <div className="bc-blue bc-wipe flex items-center justify-center py-5" style={{ animationDelay: '0.8s' }}>
             <span className="text-[72px] font-black leading-none tracking-[0.3em]">개표방송</span>
@@ -43,7 +43,10 @@ export function EndingScene({ config, results }: SceneProps) {
       <StudioBackdrop dim={0.5} />
       <div className="relative z-10 flex h-full items-center gap-20 px-32 pt-20">
         <div className="flex flex-1 flex-col gap-10">
-          <p className="bc-rise text-3xl font-bold tracking-[0.3em] text-foreground/80">{config.schoolName}</p>
+          <p className="bc-rise flex items-center gap-5 text-3xl font-bold tracking-[0.2em] text-foreground/80">
+            <SchoolEmblem className="size-16 rounded-sm" />
+            {config.schoolName}
+          </p>
           <h1 className="bc-rise text-[124px] font-black leading-[1.05]" style={{ animationDelay: '0.15s' }}>
             시청해 주셔서
             <br />

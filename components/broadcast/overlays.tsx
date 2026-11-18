@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { BroadcastConfig } from '@/lib/config'
+import { BROADCAST_CONFIG, type BroadcastConfig } from '@/lib/config'
 import type { ResultsState } from '@/hooks/use-results'
 
 function useClock() {
@@ -16,15 +16,22 @@ function useClock() {
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
+export function SchoolEmblem({ className = '' }: { className?: string }) {
+  return (
+    <span className={`flex shrink-0 items-center justify-center bg-foreground ${className}`}>
+      <img src={BROADCAST_CONFIG.logo || '/placeholder.svg'} alt="성사중학교 교표" className="h-[86%] w-auto object-contain" />
+    </span>
+  )
+}
+
 export function ChannelLogo({ className = '' }: { className?: string }) {
   return (
-    <div className={`bc-blue flex items-center gap-3 px-6 ${className}`}>
-      <span className="flex flex-col text-right text-base font-black leading-tight">
-        <span>선택</span>
-        <span className="text-xs font-bold tracking-widest opacity-80">우리학교</span>
+    <div className={`bc-blue flex items-center gap-4 pl-3 pr-6 ${className}`}>
+      <SchoolEmblem className="size-16 rounded-sm" />
+      <span className="flex flex-col text-base font-black leading-tight">
+        <span className="text-lg">성사중학교</span>
+        <span className="font-mono text-3xl font-bold leading-none tracking-tight">2026</span>
       </span>
-      <span className="h-10 w-px bg-foreground/40" />
-      <span className="font-mono text-5xl font-bold leading-none tracking-tight">2026</span>
     </div>
   )
 }
@@ -36,7 +43,7 @@ export function HeaderBug({ config, label }: { config: BroadcastConfig; label: s
       <div className="bc-slide-left flex items-stretch shadow-2xl shadow-black/50">
         <ChannelLogo />
         <div className="bc-panel flex flex-col justify-center px-7">
-          <span className="text-base font-bold tracking-[0.2em] text-ink-muted">{config.schoolName}</span>
+          <span className="text-base font-bold tracking-[0.2em] text-ink-muted">개표방송</span>
           <span className="text-[30px] font-black leading-tight">{config.electionTitle}</span>
         </div>
         <div className="flex items-center bg-navy-deep px-7 text-2xl font-black text-foreground">{label}</div>
@@ -101,13 +108,12 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
         className="bc-blue absolute inset-0 flex items-center justify-center"
         style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) 0.07s both' }}
       >
-        <div className="flex items-center gap-8">
-          <span className="flex flex-col text-right text-5xl font-black leading-tight">
-            <span>선택</span>
-            <span className="text-2xl tracking-[0.3em] opacity-80">우리학교</span>
+        <div className="flex items-center gap-10">
+          <SchoolEmblem className="size-44 rounded-md" />
+          <span className="flex flex-col text-6xl font-black leading-tight">
+            <span>성사중학교</span>
+            <span className="font-mono text-[120px] font-bold leading-none">2026</span>
           </span>
-          <span className="h-28 w-1 bg-foreground/50" />
-          <span className="font-mono text-[160px] font-bold leading-none">2026</span>
         </div>
       </div>
     </div>

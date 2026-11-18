@@ -19,8 +19,8 @@ const oswald = Oswald({
 })
 
 export const metadata: Metadata = {
-  title: '전교회장 선거 개표방송',
-  description: '실시간 전교회장 선거 개표방송 · 방송 송출 화면과 관리자 제어실',
+  title: '2026년도 성사중학교 전교회장 선거 개표방송',
+  description: '2026년도 성사중학교 전교회장 선거 실시간 개표방송',
   generator: 'v0.app',
 }
 

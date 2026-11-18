@@ -40,7 +40,7 @@ export function WinnerScene({ config, results }: SceneProps) {
 
         <div className="flex flex-1 flex-col gap-8">
           <p className="bc-slide-right text-4xl font-bold tracking-[0.15em] text-foreground/85">
-            {config.schoolName} {config.electionTitle}
+            {config.electionTitle}
           </p>
           <div className="bc-red bc-wipe w-fit px-10 py-4 text-[64px] font-black leading-none shadow-2xl shadow-black/50" style={{ animationDelay: '0.45s' }}>
             {config.winnerLabel}
