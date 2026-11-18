@@ -28,9 +28,9 @@ export function SchoolLogo({ onDark = false, className = '' }: { onDark?: boolea
 
 export function ChannelLogo({ className = '' }: { className?: string }) {
   return (
-    <div className={`bc-blue flex items-center gap-5 pl-5 pr-6 ${className}`}>
-      <SchoolLogo onDark className="h-12" />
-      <span className="h-10 w-px bg-foreground/40" aria-hidden="true" />
+    <div className={`bc-blue flex items-center gap-5 px-6 ${className}`}>
+      <SchoolLogo onDark className="h-11" />
+      <span className="h-9 w-px bg-foreground/40" aria-hidden="true" />
       <span className="font-mono text-3xl font-bold leading-none tracking-tight">2026</span>
     </div>
   )
@@ -108,9 +108,10 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
         className="bc-blue absolute inset-0 flex items-center justify-center"
         style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) 0.07s both' }}
       >
-        <div className="flex flex-col items-center gap-8">
-          <SchoolLogo onDark className="h-40" />
-          <span className="font-mono text-[120px] font-bold leading-none">2026</span>
+        <div className="flex items-center gap-12">
+          <SchoolLogo onDark className="h-32" />
+          <span className="h-36 w-1.5 bg-foreground/50" aria-hidden="true" />
+          <span className="font-mono text-[170px] font-bold leading-none">2026</span>
         </div>
       </div>
     </div>
