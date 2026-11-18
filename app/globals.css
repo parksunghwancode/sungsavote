@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: dark;
+  --background: #03060e;
+  --foreground: #f2f5fc;
+  --card: #0a1631;
+  --card-foreground: #f2f5fc;
+  --popover: #0a1631;
+  --popover-foreground: #f2f5fc;
+  --primary: #3a8dff;
+  --primary-foreground: #03060e;
+  --secondary: #12203f;
+  --secondary-foreground: #f2f5fc;
+  --muted: #12203f;
+  --muted-foreground: #8b9bc0;
+  --accent: #f5c451;
+  --accent-foreground: #03060e;
+  --destructive: #ef3f42;
+  --live: #ef3f42;
+  --gold: #f5c451;
+  --navy: #0a1631;
+  --navy-deep: #060d1f;
+  --border: #1c2c52;
+  --input: #1c2c52;
+  --ring: #3a8dff;
+  --chart-1: #3a8dff;
+  --chart-2: #f5c451;
+  --chart-3: #12a37b;
+  --chart-4: #ef3f42;
+  --chart-5: #8b9bc0;
+  --radius: 0.5rem;
+  --sidebar: #0a1631;
+  --sidebar-foreground: #f2f5fc;
+  --sidebar-primary: #3a8dff;
+  --sidebar-primary-foreground: #03060e;
+  --sidebar-accent: #12203f;
+  --sidebar-accent-foreground: #f2f5fc;
+  --sidebar-border: #1c2c52;
+  --sidebar-ring: #3a8dff;
+}
+
+@theme inline {
+  --font-sans: var(--font-noto), 'Noto Sans KR', system-ui, sans-serif;
+  --font-mono: var(--font-oswald), 'Oswald', var(--font-noto), sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-live: var(--live);
+  --color-gold: var(--gold);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* ---------- Broadcast motion ---------- */
+@keyframes bc-rise {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bc-slide-left {
+  from { opacity: 0; transform: translateX(-120px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes bc-slide-right {
+  from { opacity: 0; transform: translateX(120px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes bc-wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes bc-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bc-spin { to { transform: rotate(360deg); } }
+@keyframes bc-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes bc-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes bc-streak {
+  0% { transform: translateX(-40vw); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateX(2200px); opacity: 0; }
+}
+@keyframes bc-scan { from { transform: translateY(-200px); } to { transform: translateY(1280px); } }
+@keyframes bc-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes bc-shine { from { transform: translateX(-100%); } to { transform: translateX(400%); } }
+@keyframes bc-stamp {
+  0% { opacity: 0; transform: scale(3) rotate(-24deg); }
+  60% { opacity: 1; transform: scale(0.92) rotate(-12deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-12deg); }
+}
+@keyframes bc-credits { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+@keyframes bc-eq { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+@keyframes bc-confetti {
+  0% { transform: translate3d(0, -80px, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 40px), 1180px, 0) rotate(720deg); opacity: 1; }
+}
+@keyframes bc-transition {
+  0% { transform: translateX(-105%); }
+  42% { transform: translateX(0); }
+  58% { transform: translateX(0); }
+  100% { transform: translateX(105%); }
+}
+@keyframes bc-ring-draw { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+@keyframes bc-flash {
+  0% { opacity: 0; transform: translateY(-30px) scaleX(0.6); }
+  12% { opacity: 1; transform: translateY(0) scaleX(1); }
+  88% { opacity: 1; transform: translateY(0) scaleX(1); }
+  100% { opacity: 0; transform: translateY(-20px) scaleX(1); }
+}
+
+.bc-rise { animation: bc-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.bc-slide-left { animation: bc-slide-left 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.bc-slide-right { animation: bc-slide-right 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.bc-wipe { animation: bc-wipe 1s cubic-bezier(0.77, 0, 0.18, 1) both; }
+.bc-fade { animation: bc-fade 1s ease both; }
+.bc-pulse { animation: bc-pulse 1.4s ease-in-out infinite; }
+.bc-stamp { animation: bc-stamp 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+
+.bc-grid {
+  background-image:
+    linear-gradient(to right, rgb(58 141 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(58 141 255 / 0.07) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.bc-hide-cursor, .bc-hide-cursor * { cursor: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-respect-motion * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}

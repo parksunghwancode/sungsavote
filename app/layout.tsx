@@ -1,0 +1,45 @@
+import { Analytics } from '@vercel/analytics/next'
+import type { Metadata, Viewport } from 'next'
+import { Noto_Sans_KR, Oswald } from 'next/font/google'
+import './globals.css'
+
+const noto = Noto_Sans_KR({
+  weight: ['400', '500', '700', '900'],
+  subsets: ['latin'],
+  variable: '--font-noto',
+  display: 'swap',
+  preload: false,
+})
+
+const oswald = Oswald({
+  weight: ['500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-oswald',
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: '전교회장 선거 개표방송',
+  description: '실시간 전교회장 선거 개표방송 · 방송 송출 화면과 관리자 제어실',
+  generator: 'v0.app',
+}
+
+export const viewport: Viewport = {
+  colorScheme: 'dark',
+  themeColor: '#03060e',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="ko" className={`bg-background ${noto.variable} ${oswald.variable}`}>
+      <body className="font-sans antialiased">
+        {children}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+      </body>
+    </html>
+  )
+}
