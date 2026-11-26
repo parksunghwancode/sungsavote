@@ -8,7 +8,7 @@ export const BROADCAST_CONFIG = {
   winnerLabel: '전교회장 당선',
   ticker: '개표 결과는 선거관리위원회의 최종 확인 후 확정됩니다',
   credits: ['주최|학생회 선거관리위원회', '진행|방송부', '함께해 주신 모든 학생 여러분 감사합니다'],
-  sheetUrl: 'https://docs.google.com/spreadsheets/d/1QKftNPZx2IRmyawVlnc3eT7YkCDDoVnUdY8gCzj5ikI/edit?usp=sharing',
+  sheetUrl: 'https://docs.google.com/spreadsheets/d/182bYfn4wg2QDdXQ5WU64LJXweCAfT-ZdDzbE58jIMlg/edit?usp=sharing',
   settingsSheet: '설정',
   pollSec: 5,
 }

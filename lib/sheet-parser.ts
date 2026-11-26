@@ -88,10 +88,21 @@ export function rowsToCandidates(rows: string[][]): Candidate[] {
   }
 
   const body = hasHeader ? rows.slice(1) : rows
+  const groupColumns =
+    index.number !== undefined ? Array.from({ length: index.number }, (_, i) => i) : []
+  let firstGroup: string | null = null
   const candidates: Candidate[] = []
-  body.forEach((row, i) => {
+  for (const [i, row] of body.entries()) {
     const name = index.name !== undefined ? row[index.name]?.trim() : ''
-    if (!name) return
+    // A sheet may stack several tables in one tab (e.g. 회장 → 부회장 → 반별 집계).
+    // Only the first race of the first table is the broadcast's election.
+    if (hasHeader && index.number !== undefined && name && !row[index.number]?.trim()) break
+    const group = groupColumns.map((c) => row[c]?.trim()).find(Boolean)
+    if (group) {
+      if (firstGroup === null) firstGroup = group
+      else if (group !== firstGroup) break
+    }
+    if (!name) continue
     const number = (index.number !== undefined ? toNumber(row[index.number]) : null) ?? i + 1
     const color = index.color !== undefined ? row[index.color]?.trim() : ''
     candidates.push({
@@ -103,8 +114,14 @@ export function rowsToCandidates(rows: string[][]): Candidate[] {
       video: index.video !== undefined ? normalizeVideoUrl(row[index.video]) : undefined,
       color: /^#?[0-9a-f]{3,8}$/i.test(color ?? '') ? (color!.startsWith('#') ? color : `#${color}`) : undefined,
     })
-  })
+  }
   return candidates
+}
+
+export function rowsToInlineInvalidVotes(rows: string[][]): number | null {
+  const column = rows[0]?.findIndex((h) => /무효/.test(h)) ?? -1
+  if (column < 0) return null
+  return toNumber(rows[1]?.[column])
 }
 
 export interface SheetSettings {
