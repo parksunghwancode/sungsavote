@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Noto_Sans_KR, Oswald } from 'next/font/google'
+import { Barlow_Semi_Condensed, Noto_Sans_KR } from 'next/font/google'
 import './globals.css'
 
 const noto = Noto_Sans_KR({
@@ -11,10 +11,10 @@ const noto = Noto_Sans_KR({
   preload: false,
 })
 
-const oswald = Oswald({
-  weight: ['500', '600', '700'],
+const barlow = Barlow_Semi_Condensed({
+  weight: ['500', '600', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-oswald',
+  variable: '--font-num',
   display: 'swap',
 })
 
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'dark',
-  themeColor: '#03060e',
+  colorScheme: 'light',
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`bg-background ${noto.variable} ${oswald.variable}`}>
+    <html lang="ko" className={`bg-background ${noto.variable} ${barlow.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

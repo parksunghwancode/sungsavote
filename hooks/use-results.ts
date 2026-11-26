@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { BROADCAST_CONFIG, DEFAULT_CANDIDATES } from '@/lib/config'
 import type { CandidateView, ResultStats, ResultsData } from '@/lib/types'
 
-export const FALLBACK_COLORS = ['#2F6BFF', '#E5383B', '#12A37B', '#FF7A1A', '#9B6BFF', '#14B8C4']
+export const FALLBACK_COLORS = ['#1530D0', '#E0233A', '#12A37B', '#FF7A1A', '#9B6BFF', '#14B8C4']
 
 async function fetchResults(url: string): Promise<ResultsData> {
   const res = await fetch(url, { cache: 'no-store' })

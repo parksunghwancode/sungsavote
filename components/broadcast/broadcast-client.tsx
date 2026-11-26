@@ -67,12 +67,12 @@ export function BroadcastClient() {
 
       {!fullscreen && (
         <div className="fixed inset-x-0 bottom-6 z-50 flex justify-center px-6">
-          <div className="flex items-center gap-2 rounded-lg border border-border bg-navy/90 p-2 backdrop-blur">
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-background/95 p-2 text-foreground shadow-lg backdrop-blur">
             <button
               type="button"
               onClick={() => go(-1)}
               disabled={index === 0}
-              className="flex size-10 items-center justify-center rounded-md hover:bg-secondary disabled:opacity-30"
+              className="flex size-10 items-center justify-center rounded-md hover:bg-muted disabled:opacity-30"
               aria-label="이전 화면"
             >
               <ChevronLeft className="size-5" aria-hidden="true" />
@@ -84,7 +84,7 @@ export function BroadcastClient() {
               type="button"
               onClick={() => go(1)}
               disabled={index === SCENES.length - 1}
-              className="flex size-10 items-center justify-center rounded-md hover:bg-secondary disabled:opacity-30"
+              className="flex size-10 items-center justify-center rounded-md hover:bg-muted disabled:opacity-30"
               aria-label="다음 화면"
             >
               <ChevronRight className="size-5" aria-hidden="true" />

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ResultsState } from '@/hooks/use-results'
 import { BROADCAST_CONFIG } from '@/lib/config'
 import type { SceneKey, Slide } from '@/lib/types'
-import { HeaderBug, SceneTransition, Ticker } from './overlays'
+import { CountFooter, HeaderBug, SceneTransition, Ticker, TopRule } from './overlays'
 import { CandidatesScene } from './scenes/candidates-scene'
 import { InterimScene } from './scenes/interim-scene'
 import { LiveScene } from './scenes/live-scene'
@@ -36,15 +36,18 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
 
   const Scene = SCENE_COMPONENTS[slide.key]
   const showChrome = slide.key !== 'opening'
-  const showTicker = slide.key === 'live' || slide.key === 'interim' || slide.key === 'candidates'
+  const showTicker = slide.key === 'interim' || slide.key === 'candidates'
+  const showCount = slide.key === 'live' || slide.key === 'winner'
 
   return (
     <div className="bc-respect-motion absolute inset-0">
+      <TopRule />
       <div key={slide.id} className="absolute inset-0">
         <Scene config={BROADCAST_CONFIG} results={results} />
       </div>
       {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.label} />}
       {showTicker && <Ticker config={BROADCAST_CONFIG} results={results} />}
+      {showCount && <CountFooter results={results} />}
       <SceneTransition triggerKey={transitionKey} />
     </div>
   )

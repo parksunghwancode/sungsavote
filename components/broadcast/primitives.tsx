@@ -1,5 +1,6 @@
 'use client'
 
+import { UserRound } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import type { CandidateView } from '@/lib/types'
@@ -13,10 +14,10 @@ export function Stage({ children, className }: { children: ReactNode; className?
     return () => window.removeEventListener('resize', fit)
   }, [])
   return (
-    <div className={cn('fixed inset-0 flex items-center justify-center overflow-hidden bg-black', className)}>
+    <div className={cn('fixed inset-0 flex items-center justify-center overflow-hidden bg-muted', className)}>
       <div className="relative" style={{ width: 1920 * scale, height: 1080 * scale }}>
         <div
-          className="absolute left-0 top-0 origin-top-left overflow-hidden bg-background"
+          className="absolute left-0 top-0 origin-top-left overflow-hidden bg-background text-foreground"
           style={{ width: 1920, height: 1080, transform: `scale(${scale})` }}
         >
           {children}
@@ -80,7 +81,7 @@ export function RiseBadge({ event, color }: { event: { id: number; delta: number
   return (
     <span
       key={event.id}
-      className="bc-rise-badge pointer-events-none absolute -top-2 right-0 whitespace-nowrap px-3 py-1 font-mono text-3xl font-bold text-foreground"
+      className="bc-rise-badge pointer-events-none absolute -top-4 left-full ml-2 whitespace-nowrap rounded-full px-4 py-1 font-mono text-4xl font-bold text-primary-foreground"
       style={{ background: color }}
       aria-hidden="true"
     >
@@ -94,14 +95,14 @@ export function CandidatePhoto({
   className,
   style,
 }: {
-  candidate: Pick<CandidateView, 'photoUrl' | 'name' | 'color'>
+  candidate: Pick<CandidateView, 'photoUrl' | 'name' | 'number'>
   className?: string
   style?: CSSProperties
 }) {
   const [failed, setFailed] = useState<string | null>(null)
   const showImage = candidate.photoUrl && failed !== candidate.photoUrl
   return (
-    <div className={cn('relative overflow-hidden bg-navy', className)} style={style}>
+    <div className={cn('relative shrink-0 overflow-hidden rounded-3xl bg-muted', className)} style={style}>
       {showImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -112,70 +113,14 @@ export function CandidatePhoto({
         />
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center font-black text-foreground"
-          style={{ background: `linear-gradient(160deg, ${candidate.color}, var(--navy-deep))` }}
+          className="flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl border-4 border-dashed border-border text-muted-foreground"
           role="img"
-          aria-label={`${candidate.name} 후보`}
+          aria-label={`기호 ${candidate.number}번 ${candidate.name} 후보 사진 자리`}
         >
-          {candidate.name.slice(0, 1)}
+          <UserRound className="size-1/3" strokeWidth={1.5} aria-hidden="true" />
+          <span className="text-2xl font-bold">후보 사진</span>
         </div>
       )}
-    </div>
-  )
-}
-
-export function StudioBackdrop({ dim = 0.55, tint }: { dim?: number; tint?: string }) {
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url(/images/studio-bg.png)',
-          animation: 'bc-drift 40s ease-in-out infinite alternate',
-        }}
-      />
-      <div className="absolute inset-0" style={{ background: `rgb(5 11 28 / ${dim})` }} />
-      {tint && (
-        <div
-          className="absolute inset-0"
-          style={{ background: `radial-gradient(ellipse at 30% 40%, ${tint} 0%, transparent 60%)` }}
-        />
-      )}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 45%, rgb(5 11 28 / 0.75) 100%)' }}
-      />
-    </div>
-  )
-}
-
-export function NumberChip({ number, color, className }: { number: number; color: string; className?: string }) {
-  return (
-    <span
-      className={cn('inline-flex shrink-0 items-center justify-center font-mono font-bold leading-none text-foreground', className)}
-      style={{ background: `linear-gradient(180deg, color-mix(in srgb, ${color} 80%, white), ${color} 55%, color-mix(in srgb, ${color} 75%, black))` }}
-    >
-      {number}
-    </span>
-  )
-}
-
-export function ShareBar({ pct, color, className }: { pct: number; color: string; className?: string }) {
-  return (
-    <div className={cn('relative overflow-hidden bg-ink/10', className)}>
-      <div
-        className="relative h-full overflow-hidden"
-        style={{
-          width: `${Math.max(0, Math.min(100, pct))}%`,
-          background: `linear-gradient(180deg, color-mix(in srgb, ${color} 75%, white), ${color} 50%, color-mix(in srgb, ${color} 80%, black))`,
-          transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-      >
-        <div
-          className="absolute inset-y-0 w-1/5 bg-gradient-to-r from-transparent via-foreground/45 to-transparent"
-          style={{ animation: 'bc-shine 3s ease-in-out infinite' }}
-        />
-      </div>
     </div>
   )
 }

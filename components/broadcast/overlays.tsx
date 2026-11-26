@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { BROADCAST_CONFIG, type BroadcastConfig } from '@/lib/config'
 import type { ResultsState } from '@/hooks/use-results'
+import { CountUp } from './primitives'
 
 function useClock() {
   const [now, setNow] = useState<Date | null>(null)
@@ -18,6 +19,7 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 export function SchoolLogo({ onDark = false, className = '' }: { onDark?: boolean; className?: string }) {
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={(onDark ? BROADCAST_CONFIG.logoOnDark : BROADCAST_CONFIG.logo) || '/placeholder.svg'}
       alt={`${BROADCAST_CONFIG.schoolName} SUNGSA MIDDLE SCHOOL`}
@@ -26,12 +28,20 @@ export function SchoolLogo({ onDark = false, className = '' }: { onDark?: boolea
   )
 }
 
-export function ChannelLogo({ className = '' }: { className?: string }) {
+export function LiveBadge({ className = '' }: { className?: string }) {
   return (
-    <div className={`bc-blue flex items-center gap-5 px-6 ${className}`}>
-      <SchoolLogo onDark className="h-11" />
-      <span className="h-9 w-px bg-foreground/40" aria-hidden="true" />
-      <span className="font-mono text-3xl font-bold leading-none tracking-tight">2026</span>
+    <span className={`flex items-center gap-3 bg-primary px-5 font-mono font-bold leading-none tracking-wide text-primary-foreground ${className}`}>
+      <span className="bc-pulse size-3 rounded-full bg-primary-foreground" aria-hidden="true" />
+      LIVE
+    </span>
+  )
+}
+
+export function TopRule() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-40 flex flex-col gap-2" aria-hidden="true">
+      <div className="h-4 bg-primary" />
+      <div className="h-2 bg-primary" />
     </div>
   )
 }
@@ -39,26 +49,44 @@ export function ChannelLogo({ className = '' }: { className?: string }) {
 export function HeaderBug({ config, label }: { config: BroadcastConfig; label: string }) {
   const now = useClock()
   return (
-    <header className="absolute inset-x-12 top-10 z-30 flex h-[84px] items-stretch justify-between">
-      <div className="bc-slide-left flex items-stretch shadow-2xl shadow-black/50">
-        <ChannelLogo />
-        <div className="bc-panel flex flex-col justify-center px-7">
-          <span className="text-base font-bold tracking-[0.2em] text-ink-muted">개표방송</span>
-          <span className="text-[30px] font-black leading-tight">{config.electionTitle}</span>
-        </div>
-        <div className="flex items-center bg-navy-deep px-7 text-2xl font-black text-foreground">{label}</div>
+    <header className="bc-fade absolute inset-x-20 top-16 z-30 flex h-24 items-center justify-between">
+      <div className="flex items-center gap-8">
+        <SchoolLogo className="h-16" />
+        <span className="h-12 w-px bg-border" aria-hidden="true" />
+        <LiveBadge className="h-14 text-3xl" />
+        <span className="text-[44px] font-black tracking-tight text-foreground">{config.electionTitle} 개표방송</span>
+        <span className="rounded-full bg-muted px-5 py-2 text-2xl font-bold text-muted-foreground">{label}</span>
       </div>
-      <div className="bc-slide-right flex items-stretch shadow-2xl shadow-black/50">
-        <div className="bc-red flex items-center gap-3 px-6">
-          <span className="bc-pulse size-3.5 rounded-full bg-foreground" />
-          <span className="font-mono text-3xl font-bold tracking-wider">LIVE</span>
-        </div>
-        <div className="bc-panel flex items-center px-7 font-mono text-5xl font-semibold tabular-nums">
-          {now ? `${pad(now.getHours())}:${pad(now.getMinutes())}` : '--:--'}
-          <span className="ml-1 text-3xl text-ink-muted">{now ? `:${pad(now.getSeconds())}` : ''}</span>
-        </div>
-      </div>
+      <span className="font-mono text-6xl font-bold tabular-nums text-muted-foreground">
+        {now ? `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}` : '--:--:--'}
+      </span>
     </header>
+  )
+}
+
+export function CountFooter({ results }: { results: ResultsState }) {
+  const { stats } = results
+  const rate = stats.countRate ?? 0
+  return (
+    <footer className="bc-fade absolute inset-x-20 bottom-14 z-30 flex items-center gap-10" style={{ animationDelay: '0.5s' }}>
+      <span className="flex shrink-0 items-baseline gap-4">
+        <span className="text-3xl font-bold text-foreground">개표율</span>
+        <span className="font-mono text-7xl font-extrabold leading-none tabular-nums text-foreground">
+          {stats.countRate === null ? '—' : <CountUp value={stats.countRate} decimals={1} />}
+          {stats.countRate !== null && '%'}
+        </span>
+      </span>
+      <div className="h-4 flex-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={rate} aria-valuemin={0} aria-valuemax={100} aria-label="개표율">
+        <div
+          className="h-full rounded-full bg-primary"
+          style={{ width: `${rate}%`, transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        />
+      </div>
+      <span className="shrink-0 text-3xl font-medium tabular-nums text-foreground">
+        {stats.counted.toLocaleString()}
+        {stats.totalBallots !== null && ` / ${stats.totalBallots.toLocaleString()}`}표 개표 · 무효 {stats.invalid.toLocaleString()}표
+      </span>
+    </footer>
   )
 }
 
@@ -71,18 +99,18 @@ export function Ticker({ config, results }: { config: BroadcastConfig; results: 
       ].filter(Boolean)
     : []
   const items = [config.ticker, ...summary].filter(Boolean) as string[]
-  const line = items.join('   ▪   ')
+  const line = items.join('   ·   ')
   const duration = Math.max(30, line.length * 0.3)
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-30 flex h-[76px] items-stretch shadow-[0_-12px_32px_rgb(0_0_0/0.45)]">
-      <div className="bc-red flex shrink-0 items-center gap-3 px-9 text-[28px] font-black">
-        <span className="bc-pulse size-3 rounded-full bg-foreground" />
+    <div className="absolute inset-x-0 bottom-0 z-30 flex h-[72px] items-stretch border-t border-border bg-muted">
+      <div className="flex shrink-0 items-center gap-3 bg-primary px-9 text-[26px] font-black text-primary-foreground">
+        <span className="bc-pulse size-3 rounded-full bg-primary-foreground" aria-hidden="true" />
         개표 속보
       </div>
-      <div className="bc-panel relative flex-1 overflow-hidden">
+      <div className="relative flex-1 overflow-hidden">
         <div
-          className="absolute inset-y-0 left-0 flex items-center whitespace-nowrap text-[30px] font-bold"
+          className="absolute inset-y-0 left-0 flex items-center whitespace-nowrap text-[28px] font-bold text-foreground"
           style={{ animation: `bc-marquee ${duration}s linear infinite` }}
         >
           <span className="pl-12 pr-24">{line}</span>
@@ -91,7 +119,6 @@ export function Ticker({ config, results }: { config: BroadcastConfig; results: 
           </span>
         </div>
       </div>
-      <div className="bc-blue flex shrink-0 items-center px-8 text-xl font-bold">선거관리위원회 집계</div>
     </div>
   )
 }
@@ -101,7 +128,7 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
   return (
     <div key={triggerKey} className="pointer-events-none absolute inset-0 z-50 overflow-hidden" aria-hidden="true">
       <div
-        className="bc-red absolute inset-0"
+        className="absolute inset-0 bg-primary-deep"
         style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) both' }}
       />
       <div
@@ -110,7 +137,7 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
       >
         <div className="flex items-center gap-12">
           <SchoolLogo onDark className="h-32" />
-          <span className="h-36 w-1.5 bg-foreground/50" aria-hidden="true" />
+          <span className="h-36 w-1.5 bg-primary-foreground/50" />
           <span className="font-mono text-[170px] font-bold leading-none">2026</span>
         </div>
       </div>
