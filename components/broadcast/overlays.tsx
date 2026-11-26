@@ -136,12 +136,13 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
         style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) both' }}
       />
       <div
-        className="absolute inset-0 flex items-center justify-center bg-navy-deep text-primary-foreground"
+        className="absolute inset-0 flex items-center justify-center bg-background text-foreground"
         style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) 0.08s both' }}
       >
+        <div className="absolute inset-x-0 top-0 h-3 bg-primary" />
         <div className="flex items-center gap-6">
-          <span className="font-mono text-8xl font-bold">2026</span>
-          <span className="h-20 w-1 bg-primary" />
+          <span className="font-mono text-8xl font-bold text-primary">2026</span>
+          <span className="h-20 w-1 bg-border" />
           <span className="text-6xl font-black">선택 우리학교</span>
         </div>
       </div>
