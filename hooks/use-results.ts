@@ -1,7 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { BROADCAST_CONFIG, DEFAULT_CANDIDATES } from '@/lib/config'
+import { BROADCAST_CONFIG, CANDIDATE_PHOTOS, DEFAULT_CANDIDATES } from '@/lib/config'
 import type { CandidateView, Race, ResultStats, ResultsData } from '@/lib/types'
 
 export const FALLBACK_COLORS = ['#1530D0', '#E0233A', '#12A37B', '#FF7A1A', '#9B6BFF', '#14B8C4']
@@ -41,7 +41,7 @@ function computeRace(race: Race, eligible: number | null) {
   const list: CandidateView[] = race.candidates.map((c, i) => ({
     ...c,
     color: c.color || FALLBACK_COLORS[i % FALLBACK_COLORS.length],
-    photoUrl: c.photo ?? null,
+    photoUrl: CANDIDATE_PHOTOS[c.name.trim()] ?? c.photo ?? null,
     rank: 0,
     pct: 0,
   }))

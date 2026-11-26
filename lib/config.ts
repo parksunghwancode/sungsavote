@@ -15,6 +15,10 @@ export const BROADCAST_CONFIG = {
 
 export type BroadcastConfig = typeof BROADCAST_CONFIG
 
+export const CANDIDATE_PHOTOS: Record<string, string> = {
+  임소연: '/images/candidates/lim-soyeon.jpg',
+}
+
 export const DEFAULT_CANDIDATES: Candidate[] = [
   { number: 1, name: '윤민재', slogan: '', votes: 0 },
   { number: 2, name: '임소연', slogan: '', votes: 0 },
