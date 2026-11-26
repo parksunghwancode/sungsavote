@@ -139,10 +139,10 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
         className="bc-blue absolute inset-0 flex items-center justify-center"
         style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) 0.07s both' }}
       >
-        <div className="flex items-center gap-12">
-          <SchoolLogo onDark className="h-32" />
-          <span className="h-36 w-1.5 bg-primary-foreground/50" />
-          <span className="font-mono text-[170px] font-bold leading-none">2026</span>
+        <div className="flex flex-col items-center gap-6">
+          <span className="font-mono text-[150px] font-bold leading-none tracking-tight">2026</span>
+          <span className="h-1 w-24 rounded-full bg-primary-foreground/60" />
+          <span className="text-2xl font-semibold tracking-[0.3em] text-primary-foreground/80">전교회장 선거 개표방송</span>
         </div>
       </div>
     </div>
