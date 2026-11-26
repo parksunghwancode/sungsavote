@@ -50,14 +50,18 @@ export function HeaderBug({ config, label }: { config: BroadcastConfig; label: s
   const now = useClock()
   return (
     <header className="bc-fade absolute inset-x-20 top-16 z-30 flex h-24 items-center justify-between">
-      <div className="flex items-center gap-8">
-        <SchoolLogo className="h-16" />
-        <span className="h-12 w-px bg-border" aria-hidden="true" />
-        <LiveBadge className="h-14 text-3xl" />
-        <span className="text-[44px] font-black tracking-tight text-foreground">{config.electionTitle} 개표방송</span>
-        <span className="rounded-full bg-muted px-5 py-2 text-2xl font-bold text-muted-foreground">{label}</span>
+      <div className="flex min-w-0 items-center gap-8">
+        <SchoolLogo className="h-16 shrink-0" />
+        <span className="h-12 w-px shrink-0 bg-border" aria-hidden="true" />
+        <LiveBadge className="h-14 shrink-0 text-3xl" />
+        <span className="truncate whitespace-nowrap text-[40px] font-black tracking-tight text-foreground">
+          {config.electionTitle} 개표방송
+        </span>
+        <span className="shrink-0 whitespace-nowrap rounded-full bg-muted px-5 py-2 text-2xl font-bold text-muted-foreground">
+          {label}
+        </span>
       </div>
-      <span className="font-mono text-6xl font-bold tabular-nums text-muted-foreground">
+      <span className="ml-8 shrink-0 font-mono text-6xl font-bold tabular-nums text-muted-foreground">
         {now ? `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}` : '--:--:--'}
       </span>
     </header>

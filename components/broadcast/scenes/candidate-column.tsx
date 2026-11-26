@@ -4,6 +4,13 @@ import type { ReactNode } from 'react'
 import type { CandidateView } from '@/lib/types'
 import { CandidatePhoto } from '../primitives'
 
+export function RaceTag({ title }: { title?: string }) {
+  if (!title) return null
+  return (
+    <span className="shrink-0 rounded-full bg-primary px-6 py-2 text-3xl font-black text-primary-foreground">{title}</span>
+  )
+}
+
 export function CandidateColumns({ children }: { children: ReactNode }) {
   return <ul className="flex flex-1 items-stretch divide-x divide-border">{children}</ul>
 }

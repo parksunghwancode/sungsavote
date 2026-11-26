@@ -2,7 +2,7 @@
 
 import type { CandidateView } from '@/lib/types'
 import { CountUp, RiseBadge, useRiseEvent } from '../primitives'
-import { CandidateColumn, CandidateColumns } from './candidate-column'
+import { CandidateColumn, CandidateColumns, RaceTag } from './candidate-column'
 import type { SceneProps } from './types'
 
 function VoteBlock({ candidate: c }: { candidate: CandidateView }) {
@@ -42,7 +42,10 @@ export function LiveScene({ results }: SceneProps) {
   return (
     <div className="absolute inset-0 flex flex-col gap-4 px-20 pb-[160px] pt-[180px]">
       <div className="bc-rise flex flex-col items-center gap-2">
-        <h2 className="text-[68px] font-black leading-tight tracking-tight">{headline}</h2>
+        <div className="flex items-center gap-6">
+          <RaceTag title={results.raceTitle} />
+          <h2 className="text-[68px] font-black leading-tight tracking-tight">{headline}</h2>
+        </div>
         {updated && <p className="text-2xl font-medium text-muted-foreground">{updated} 현재 집계</p>}
       </div>
       <CandidateColumns>

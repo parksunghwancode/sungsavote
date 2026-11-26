@@ -1,7 +1,7 @@
 'use client'
 
 import { CountUp } from '../primitives'
-import { CandidateColumn, CandidateColumns } from './candidate-column'
+import { CandidateColumn, CandidateColumns, RaceTag } from './candidate-column'
 import type { SceneProps } from './types'
 
 export function WinnerScene({ results }: SceneProps) {
@@ -20,9 +20,12 @@ export function WinnerScene({ results }: SceneProps) {
 
   return (
     <div className="absolute inset-0 flex flex-col gap-4 px-20 pb-[160px] pt-[180px]">
-      <h2 className="bc-rise text-center text-[72px] font-black leading-tight tracking-tight">
-        기호 {winner.number}번 {winner.name} 후보 당선 확정
-      </h2>
+      <div className="bc-rise flex items-center justify-center gap-6">
+        <RaceTag title={results.raceTitle} />
+        <h2 className="text-[72px] font-black leading-tight tracking-tight">
+          기호 {winner.number}번 {winner.name} 후보 당선 확정
+        </h2>
+      </div>
       <CandidateColumns>
         {candidates.map((c, i) => {
           const isWinner = c.number === winner.number

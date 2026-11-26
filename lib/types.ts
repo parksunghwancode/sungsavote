@@ -13,10 +13,28 @@ export interface Slide {
   id: string
   key: SceneKey
   label: string
+  race?: number
 }
 
-export function buildSlides(): Slide[] {
-  return SCENES.map((scene) => ({ id: scene.key, key: scene.key, label: scene.label }))
+const PER_RACE: SceneKey[] = ['candidates', 'live', 'interim', 'winner']
+
+export function buildSlides(raceTitles: string[] = []): Slide[] {
+  const races = raceTitles.length ? raceTitles : ['']
+  return SCENES.flatMap<Slide>((scene) => {
+    if (!PER_RACE.includes(scene.key)) return [{ id: scene.key, key: scene.key, label: scene.label }]
+    return races.map((title, race) => ({
+      id: `${scene.key}-${race}`,
+      key: scene.key,
+      label: races.length > 1 && title ? `${scene.label} · ${title}` : scene.label,
+      race,
+    }))
+  })
+}
+
+export interface Race {
+  title: string
+  candidates: Candidate[]
+  invalidVotes: number
 }
 
 export interface Candidate {
@@ -33,6 +51,7 @@ export type DataSource = 'sheet' | 'appsscript' | 'dummy'
 
 export interface ResultsData {
   candidates: Candidate[]
+  races?: Race[]
   totalBallots: number | null
   countedBallots: number | null
   invalidVotes: number

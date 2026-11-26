@@ -1,7 +1,7 @@
 'use client'
 
 import { CountUp } from '../primitives'
-import { CandidateColumn, CandidateColumns } from './candidate-column'
+import { CandidateColumn, CandidateColumns, RaceTag } from './candidate-column'
 import type { SceneProps } from './types'
 
 export function InterimScene({ results }: SceneProps) {
@@ -11,7 +11,11 @@ export function InterimScene({ results }: SceneProps) {
   return (
     <div className="absolute inset-0 flex flex-col gap-8 px-20 pb-[120px] pt-[188px]">
       <div className="bc-rise flex items-center justify-center gap-6">
-        <span className="rounded-full bg-accent px-6 py-2 text-3xl font-black text-accent-foreground">중간 집계</span>
+        {results.raceTitle ? (
+          <RaceTag title={results.raceTitle} />
+        ) : (
+          <span className="rounded-full bg-accent px-6 py-2 text-3xl font-black text-accent-foreground">중간 집계</span>
+        )}
         <h2 className="text-[68px] font-black leading-tight tracking-tight">개표 중간 상황</h2>
         <span className="text-[68px] font-black leading-tight text-muted-foreground">
           개표율{' '}

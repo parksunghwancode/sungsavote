@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import { BROADCAST_CONFIG, DEFAULT_CANDIDATES } from '@/lib/config'
-import type { CandidateView, ResultStats, ResultsData } from '@/lib/types'
+import type { CandidateView, Race, ResultStats, ResultsData } from '@/lib/types'
 
 export const FALLBACK_COLORS = ['#1530D0', '#E0233A', '#12A37B', '#FF7A1A', '#9B6BFF', '#14B8C4']
 
@@ -26,9 +26,19 @@ export function useResults() {
     errorRetryInterval: 5000,
   })
 
-  const source = data?.candidates.length ? data.candidates : DEFAULT_CANDIDATES
+  const eligible = data?.eligibleVoters ?? null
+  const sourceRaces: Race[] = data?.races?.length
+    ? data.races
+    : [{ title: '', candidates: data?.candidates.length ? data.candidates : DEFAULT_CANDIDATES, invalidVotes: data?.invalidVotes ?? 0 }]
+  const races = sourceRaces.map((race) => computeRace(race, eligible))
 
-  const list: CandidateView[] = source.map((c, i) => ({
+  return { ...races[0], races, title: data?.title, updatedAt: data?.updatedAt }
+}
+
+export type RaceResults = ReturnType<typeof computeRace>
+
+function computeRace(race: Race, eligible: number | null) {
+  const list: CandidateView[] = race.candidates.map((c, i) => ({
     ...c,
     color: c.color || FALLBACK_COLORS[i % FALLBACK_COLORS.length],
     photoUrl: c.photo ?? null,
@@ -44,9 +54,8 @@ export function useResults() {
 
   const candidates = [...list].sort((a, b) => a.number - b.number)
   const ranked = sorted
-  const invalid = data?.invalidVotes ?? 0
+  const invalid = race.invalidVotes
   const counted = validVotes + invalid
-  const eligible = data?.eligibleVoters ?? null
 
   const stats: ResultStats = {
     validVotes,
@@ -62,7 +71,7 @@ export function useResults() {
     runnerUp: ranked[1] ?? null,
   }
 
-  return { candidates, ranked, stats, title: data?.title, updatedAt: data?.updatedAt }
+  return { candidates, ranked, stats, raceTitle: race.title }
 }
 
 export type ResultsState = ReturnType<typeof useResults>

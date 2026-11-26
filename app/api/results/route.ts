@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { extractSheetId, parseCsv, rowsToCandidates, rowsToInlineInvalidVotes, rowsToSettings } from '@/lib/sheet-parser'
+import { extractSheetId, parseCsv, rowsToCandidates, rowsToRaces, rowsToSettings } from '@/lib/sheet-parser'
 import type { ResultsData } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -69,11 +69,12 @@ export async function GET(request: NextRequest) {
     const settingRows = sameAsCandidates ? [] : fetchedSettingRows
 
     const settings = rowsToSettings(settingRows)
-    const inlineInvalid = rowsToInlineInvalidVotes(candidateRows)
-    if (!settings.invalidVotes && inlineInvalid !== null) settings.invalidVotes = inlineInvalid
+    const races = rowsToRaces(candidateRows)
+    if (!settings.invalidVotes && races[0]) settings.invalidVotes = races[0].invalidVotes
 
     const payload: ResultsData = {
-      candidates: rowsToCandidates(candidateRows),
+      candidates: races[0]?.candidates ?? [],
+      races,
       ...settings,
       source: 'sheet',
       updatedAt: new Date().toISOString(),

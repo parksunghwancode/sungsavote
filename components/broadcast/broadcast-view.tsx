@@ -34,6 +34,8 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
     return () => clearTimeout(timer.current)
   }, [target, slide.id])
 
+  const race = slide.race !== undefined ? results.races[slide.race] : undefined
+  const scoped: ResultsState = race ? { ...results, ...race } : results
   const Scene = SCENE_COMPONENTS[slide.key]
   const showChrome = slide.key !== 'opening'
   const showTicker = slide.key === 'interim' || slide.key === 'candidates'
@@ -43,11 +45,11 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
     <div className="bc-respect-motion absolute inset-0">
       <TopRule />
       <div key={slide.id} className="absolute inset-0">
-        <Scene config={BROADCAST_CONFIG} results={results} />
+        <Scene config={BROADCAST_CONFIG} results={scoped} />
       </div>
       {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.label} />}
-      {showTicker && <Ticker config={BROADCAST_CONFIG} results={results} />}
-      {showCount && <CountFooter results={results} />}
+      {showTicker && <Ticker config={BROADCAST_CONFIG} results={scoped} />}
+      {showCount && <CountFooter results={scoped} />}
       <SceneTransition triggerKey={transitionKey} />
     </div>
   )

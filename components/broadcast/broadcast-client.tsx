@@ -12,7 +12,8 @@ const PREV_KEYS = new Set(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'])
 
 export function BroadcastClient() {
   const results = useResults()
-  const SCENES = useMemo(() => buildSlides(), [])
+  const raceKey = results.races.map((r) => r.raceTitle).join('\u0000')
+  const SCENES = useMemo(() => buildSlides(raceKey.split('\u0000')), [raceKey])
   const countRef = useRef(SCENES.length)
   countRef.current = SCENES.length
 

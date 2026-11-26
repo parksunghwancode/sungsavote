@@ -69,6 +69,43 @@ const COLUMN_MATCHERS: Record<keyof Omit<Candidate, 'votes'> | 'votes', RegExp> 
   color: /색|color/i,
 }
 
+export interface ParsedRace {
+  title: string
+  candidates: Candidate[]
+  invalidVotes: number
+}
+
+export function rowsToRaces(rows: string[][]): ParsedRace[] {
+  const header = rows[0]?.map((h) => h.trim()) ?? []
+  const numberCol = header.findIndex((h) => COLUMN_MATCHERS.number.test(h))
+  const invalidCol = header.findIndex((h) => /무효/.test(h))
+  if (numberCol <= 0) {
+    const candidates = rowsToCandidates(rows)
+    const invalid = invalidCol >= 0 ? toNumber(rows[1]?.[invalidCol]) : null
+    return candidates.length ? [{ title: '', candidates, invalidVotes: invalid ?? 0 }] : []
+  }
+
+  const blocks: { title: string; rows: string[][]; invalid: number }[] = []
+  for (const row of rows.slice(1)) {
+    const group = row.slice(0, numberCol).map((c) => c.trim()).find(Boolean)
+    if (group) {
+      blocks.push({ title: group, rows: [], invalid: (invalidCol >= 0 ? toNumber(row[invalidCol]) : null) ?? 0 })
+    } else if (!row[numberCol]?.trim()) {
+      break
+    }
+    if (blocks.length === 0) blocks.push({ title: '', rows: [], invalid: 0 })
+    blocks[blocks.length - 1].rows.push(row)
+  }
+
+  return blocks
+    .map((b) => ({
+      title: b.title,
+      candidates: rowsToCandidates([rows[0], ...b.rows]),
+      invalidVotes: b.invalid,
+    }))
+    .filter((r) => r.candidates.length > 0)
+}
+
 export function rowsToCandidates(rows: string[][]): Candidate[] {
   if (rows.length === 0) return []
   const header = rows[0].map((h) => h.trim())
