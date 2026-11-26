@@ -14,8 +14,33 @@ export function RaceTag({ title }: { title?: string }) {
   )
 }
 
-export function CandidateColumns({ children }: { children: ReactNode }) {
-  return <ul className="flex flex-1 items-stretch divide-x divide-border">{children}</ul>
+export function CandidateColumns({ children, className = 'divide-x divide-border' }: { children: ReactNode; className?: string }) {
+  return <ul className={`flex flex-1 items-stretch ${className}`}>{children}</ul>
+}
+
+export function CandidateIdentity({
+  candidate: c,
+  photo,
+  nameSize = 'text-6xl',
+}: {
+  candidate: CandidateView
+  photo: { width: number; height: number }
+  nameSize?: string
+}) {
+  return (
+    <div className="flex shrink-0 flex-col items-center gap-5">
+      <CandidatePhoto candidate={c} style={{ width: photo.width, height: photo.height }} />
+      <div className="flex flex-col items-center gap-2">
+        <span className={`flex items-baseline gap-5 font-black leading-none ${nameSize}`}>
+          <span className="text-[0.62em]" style={{ color: c.color }}>
+            기호 {c.number}번
+          </span>
+          <span className="text-foreground">{c.name}</span>
+        </span>
+        {c.slogan && <span className="text-balance text-center text-3xl font-medium text-muted-foreground">{c.slogan}</span>}
+      </div>
+    </div>
+  )
 }
 
 export function CandidateColumn({
