@@ -22,7 +22,7 @@ function VoteBlock({ candidate: c }: { candidate: CandidateView }) {
         <CountUp value={c.pct} decimals={1} />%
       </span>
       <span
-        className={`rounded-full px-8 py-2 text-3xl font-black ${leading ? 'bg-primary text-primary-foreground' : 'invisible'}`}
+        className={`border-t-4 border-primary px-2 pt-2 text-3xl font-black text-primary ${leading ? '' : 'invisible'}`}
       >
         현재 1위
       </span>

@@ -7,7 +7,10 @@ import { CandidatePhoto } from '../primitives'
 export function RaceTag({ title }: { title?: string }) {
   if (!title) return null
   return (
-    <span className="shrink-0 rounded-full bg-primary px-6 py-2 text-3xl font-black text-primary-foreground">{title}</span>
+    <span className="flex shrink-0 items-center gap-6 text-5xl font-black text-primary">
+      {title}
+      <span className="h-12 w-1 bg-border" aria-hidden="true" />
+    </span>
   )
 }
 

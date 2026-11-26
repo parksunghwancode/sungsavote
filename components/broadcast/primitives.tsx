@@ -102,7 +102,7 @@ export function CandidatePhoto({
   const [failed, setFailed] = useState<string | null>(null)
   const showImage = candidate.photoUrl && failed !== candidate.photoUrl
   return (
-    <div className={cn('relative shrink-0 overflow-hidden rounded-3xl bg-muted', className)} style={style}>
+    <div className={cn('relative shrink-0 overflow-hidden rounded-xl bg-muted', className)} style={style}>
       {showImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -113,12 +113,11 @@ export function CandidatePhoto({
         />
       ) : (
         <div
-          className="flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl border-4 border-dashed border-border text-muted-foreground"
+          className="flex h-full w-full items-end justify-center text-border"
           role="img"
           aria-label={`기호 ${candidate.number}번 ${candidate.name} 후보 사진 자리`}
         >
-          <UserRound className="size-1/3" strokeWidth={1.5} aria-hidden="true" />
-          <span className="text-2xl font-bold">후보 사진</span>
+          <UserRound className="size-3/4 translate-y-[12%]" strokeWidth={1.25} aria-hidden="true" />
         </div>
       )}
     </div>

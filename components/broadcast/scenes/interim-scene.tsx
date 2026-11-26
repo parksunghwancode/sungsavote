@@ -14,7 +14,7 @@ export function InterimScene({ results }: SceneProps) {
         {results.raceTitle ? (
           <RaceTag title={results.raceTitle} />
         ) : (
-          <span className="rounded-full bg-accent px-6 py-2 text-3xl font-black text-accent-foreground">중간 집계</span>
+          <RaceTag title="중간 집계" />
         )}
         <h2 className="text-[68px] font-black leading-tight tracking-tight">개표 중간 상황</h2>
         <span className="text-[68px] font-black leading-tight text-muted-foreground">
@@ -43,7 +43,7 @@ export function InterimScene({ results }: SceneProps) {
         ))}
       </CandidateColumns>
 
-      <div className="bc-wipe flex h-14 gap-1 overflow-hidden rounded-full" style={{ animationDelay: '0.6s' }} aria-label="득표율 비교">
+      <div className="bc-wipe flex h-14 gap-1 overflow-hidden rounded-lg" style={{ animationDelay: '0.6s' }} aria-label="득표율 비교">
         {candidates.map((c) => (
           <div
             key={c.number}

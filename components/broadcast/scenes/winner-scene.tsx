@@ -25,7 +25,7 @@ export function WinnerScene({ results }: SceneProps) {
       <div className="flex items-center gap-20">
         <CandidatePhoto
           candidate={winner}
-          className="bc-rise shadow-xl"
+          className="bc-rise"
           style={{ width: 340, height: 408, animationDelay: '0.15s' }}
         />
 
@@ -44,7 +44,7 @@ export function WinnerScene({ results }: SceneProps) {
             </span>
           </div>
           <span
-            className="bc-stamp rounded-full bg-primary px-12 py-3 text-5xl font-black text-primary-foreground"
+            className="bc-wipe rounded-lg bg-primary px-10 py-3 text-5xl font-black text-primary-foreground"
             style={{ animationDelay: '1.2s' }}
           >
             당선 확정
