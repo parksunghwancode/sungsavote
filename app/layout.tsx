@@ -19,8 +19,8 @@ const barlow = Barlow_Semi_Condensed({
 })
 
 export const metadata: Metadata = {
-  title: '2026년도 성사중학교 전교회장 선거 개표방송',
-  description: '2026년도 성사중학교 전교회장 선거 실시간 개표방송',
+  title: '2027년도 성사중학교 전교회장 선거 개표방송',
+  description: '2027년도 성사중학교 전교회장 선거 실시간 개표방송',
   generator: 'v0.app',
 }
 
