@@ -46,18 +46,21 @@ export function TopRule() {
 export function HeaderBug({ config, label }: { config: BroadcastConfig; label: string }) {
   const now = useClock()
   return (
-    <header className="bc-fade absolute inset-x-20 top-16 z-30 flex h-24 items-center justify-between">
+    <header className="bc-fade absolute inset-x-20 top-14 z-30 flex h-28 items-center justify-between gap-10">
       <div className="flex min-w-0 items-center gap-8">
         <SchoolLogo className="h-16 shrink-0" />
-        <span className="h-12 w-px shrink-0 bg-border" aria-hidden="true" />
-        <LiveBadge className="h-14 shrink-0 text-3xl" />
-        <span className="truncate whitespace-nowrap text-[40px] font-black tracking-tight text-foreground">
-          {config.electionTitle} 개표방송
-        </span>
-        <span className="h-10 w-px shrink-0 bg-border" aria-hidden="true" />
-        <span className="shrink-0 whitespace-nowrap text-3xl font-bold text-muted-foreground">{label}</span>
+        <span className="h-16 w-px shrink-0 bg-border" aria-hidden="true" />
+        <div className="flex min-w-0 flex-col gap-2">
+          <div className="flex items-center gap-4">
+            <LiveBadge className="h-9 shrink-0 text-xl" />
+            <span className="whitespace-nowrap text-2xl font-bold leading-none text-primary">{label}</span>
+          </div>
+          <span className="whitespace-nowrap text-[40px] font-black leading-tight tracking-tight text-foreground">
+            {config.electionTitle} 개표방송
+          </span>
+        </div>
       </div>
-      <span className="ml-8 shrink-0 font-mono text-6xl font-bold tabular-nums text-muted-foreground">
+      <span className="shrink-0 font-mono text-6xl font-bold tabular-nums text-muted-foreground">
         {now ? `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}` : '--:--:--'}
       </span>
     </header>
@@ -135,7 +138,7 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
           className="flex flex-col items-center gap-6"
           style={{ animation: 'bc-wipe-content 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
         >
-          <span className="font-mono text-2xl font-semibold tracking-[0.5em] opacity-80">2026 ELECTION</span>
+          <span className="font-mono text-2xl font-semibold tracking-[0.5em] opacity-80">2027 ELECTION</span>
           <span className="text-8xl font-black leading-none tracking-tight text-balance">선택 우리학교</span>
           <span
             className="h-1 w-48 origin-left rounded-full bg-primary-foreground"

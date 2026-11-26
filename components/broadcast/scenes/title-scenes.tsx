@@ -76,7 +76,7 @@ export function EndingScene({ config, results }: SceneProps) {
               </div>
             )
           })}
-          <span className="pt-10 font-mono text-3xl font-bold tracking-[0.4em] text-primary">ELECTION NIGHT 2026</span>
+          <span className="pt-10 font-mono text-3xl font-bold tracking-[0.4em] text-primary">ELECTION NIGHT 2027</span>
         </div>
       </div>
     </div>
