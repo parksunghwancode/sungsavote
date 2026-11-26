@@ -132,17 +132,17 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
   return (
     <div key={triggerKey} className="pointer-events-none absolute inset-0 z-50 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-0 bg-primary-deep"
-        style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) both' }}
+        className="absolute inset-0 bg-primary"
+        style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) both' }}
       />
       <div
-        className="bc-blue absolute inset-0 flex items-center justify-center"
-        style={{ animation: 'bc-transition 1.1s cubic-bezier(0.77, 0, 0.18, 1) 0.07s both' }}
+        className="absolute inset-0 flex items-center justify-center bg-navy-deep text-primary-foreground"
+        style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) 0.08s both' }}
       >
-        <div className="flex flex-col items-center gap-6">
-          <span className="font-mono text-[150px] font-bold leading-none tracking-tight">2026</span>
-          <span className="h-1 w-24 rounded-full bg-primary-foreground/60" />
-          <span className="text-2xl font-semibold tracking-[0.3em] text-primary-foreground/80">전교회장 선거 개표방송</span>
+        <div className="flex items-center gap-6">
+          <span className="font-mono text-8xl font-bold">2026</span>
+          <span className="h-20 w-1 bg-primary" />
+          <span className="text-6xl font-black">선택 우리학교</span>
         </div>
       </div>
     </div>
