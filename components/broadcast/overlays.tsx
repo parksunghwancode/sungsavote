@@ -128,19 +128,19 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
   return (
     <div key={triggerKey} className="pointer-events-none absolute inset-0 z-50 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-0 bg-primary"
-        style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) both' }}
-      />
-      <div
-        className="absolute inset-0 flex items-center justify-center bg-background text-foreground"
-        style={{ animation: 'bc-transition 1.2s cubic-bezier(0.77, 0, 0.18, 1) 0.08s both' }}
+        className="absolute inset-0 flex items-center justify-center bg-primary text-primary-foreground"
+        style={{ animation: 'bc-wipe 1.3s cubic-bezier(0.83, 0, 0.17, 1) both' }}
       >
-        <div className="absolute inset-y-0 left-0 w-6 bg-primary" />
-        <div className="flex items-stretch overflow-hidden rounded-xl border-2 border-primary">
-          <span className="flex items-center bg-primary px-10 py-6 font-mono text-8xl font-bold leading-none text-primary-foreground">
-            2026
-          </span>
-          <span className="flex items-center px-12 text-7xl font-black leading-none">선택 우리학교</span>
+        <div
+          className="flex flex-col items-center gap-6"
+          style={{ animation: 'bc-wipe-content 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
+        >
+          <span className="font-mono text-2xl font-semibold tracking-[0.5em] opacity-80">2026 ELECTION</span>
+          <span className="text-8xl font-black leading-none tracking-tight text-balance">선택 우리학교</span>
+          <span
+            className="h-1 w-48 origin-left rounded-full bg-primary-foreground"
+            style={{ animation: 'bc-wipe-line 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
+          />
         </div>
       </div>
     </div>
