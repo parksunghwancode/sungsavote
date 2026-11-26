@@ -154,23 +154,23 @@
   58% { transform: translateX(0); }
   100% { transform: translateX(105%); }
 }
-@keyframes bc-wipe {
+@keyframes bc-cover {
   0% { clip-path: inset(100% 0 0 0); }
   34% { clip-path: inset(0 0 0 0); }
   64% { clip-path: inset(0 0 0 0); }
   100% { clip-path: inset(0 0 100% 0); }
 }
-@keyframes bc-wipe-content {
+@keyframes bc-cover-content {
   0%, 18% { opacity: 0; transform: translateY(32px); }
   40%, 62% { opacity: 1; transform: translateY(0); }
   90%, 100% { opacity: 0; transform: translateY(-32px); }
 }
-@keyframes bc-wipe-line {
+@keyframes bc-cover-line {
   0%, 26% { transform: scaleX(0); }
   56%, 100% { transform: scaleX(1); }
 }
 @media (prefers-reduced-motion: reduce) {
-  [style*='bc-wipe'] { animation-duration: 0.01ms !important; }
+  [style*='bc-cover'] { animation-duration: 0.01ms !important; }
 }
 @keyframes bc-drift {
   from { transform: scale(1.06) translateX(-1.5%); }

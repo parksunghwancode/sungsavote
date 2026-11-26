@@ -1,10 +1,9 @@
-export type SceneKey = 'opening' | 'candidates' | 'live' | 'interim' | 'winner' | 'ending'
+export type SceneKey = 'opening' | 'candidates' | 'live' | 'winner' | 'ending'
 
 export const SCENES: { key: SceneKey; label: string }[] = [
   { key: 'opening', label: '오프닝' },
   { key: 'candidates', label: '후보자 소개' },
   { key: 'live', label: '실시간 개표 현황' },
-  { key: 'interim', label: '개표 중간 방송' },
   { key: 'winner', label: '당선자 발표' },
   { key: 'ending', label: '방송 종료' },
 ]
@@ -16,7 +15,7 @@ export interface Slide {
   race?: number
 }
 
-const PER_RACE: SceneKey[] = ['candidates', 'live', 'interim', 'winner']
+const PER_RACE: SceneKey[] = ['candidates', 'live', 'winner']
 
 export function buildSlides(raceTitles: string[] = []): Slide[] {
   const races = raceTitles.length ? raceTitles : ['']

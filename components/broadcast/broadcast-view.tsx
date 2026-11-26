@@ -6,7 +6,6 @@ import { BROADCAST_CONFIG } from '@/lib/config'
 import type { SceneKey, Slide } from '@/lib/types'
 import { CountFooter, HeaderBug, SceneTransition, Ticker, TopRule } from './overlays'
 import { CandidatesScene } from './scenes/candidates-scene'
-import { InterimScene } from './scenes/interim-scene'
 import { LiveScene } from './scenes/live-scene'
 import { EndingScene, OpeningScene } from './scenes/title-scenes'
 import type { SceneProps } from './scenes/types'
@@ -16,7 +15,6 @@ const SCENE_COMPONENTS: Record<SceneKey, (props: SceneProps) => React.ReactNode>
   opening: OpeningScene,
   candidates: CandidatesScene,
   live: LiveScene,
-  interim: InterimScene,
   winner: WinnerScene,
   ending: EndingScene,
 }
@@ -38,7 +36,7 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
   const scoped: ResultsState = race ? { ...results, ...race } : results
   const Scene = SCENE_COMPONENTS[slide.key]
   const showChrome = slide.key !== 'opening'
-  const showTicker = slide.key === 'interim' || slide.key === 'candidates'
+  const showTicker = slide.key === 'candidates'
   const showCount = slide.key === 'live' || slide.key === 'winner'
 
   return (

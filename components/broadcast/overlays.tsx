@@ -132,17 +132,17 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
     <div key={triggerKey} className="pointer-events-none absolute inset-0 z-50 overflow-hidden" aria-hidden="true">
       <div
         className="absolute inset-0 flex items-center justify-center bg-primary text-primary-foreground"
-        style={{ animation: 'bc-wipe 1.3s cubic-bezier(0.83, 0, 0.17, 1) both' }}
+        style={{ animation: 'bc-cover 1.3s cubic-bezier(0.83, 0, 0.17, 1) both' }}
       >
         <div
           className="flex flex-col items-center gap-6"
-          style={{ animation: 'bc-wipe-content 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
+          style={{ animation: 'bc-cover-content 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
         >
           <span className="font-mono text-2xl font-semibold tracking-[0.5em] opacity-80">2027 ELECTION</span>
           <span className="text-8xl font-black leading-none tracking-tight text-balance">선택 우리학교</span>
           <span
             className="h-1 w-48 origin-left rounded-full bg-primary-foreground"
-            style={{ animation: 'bc-wipe-line 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
+            style={{ animation: 'bc-cover-line 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
           />
         </div>
       </div>
