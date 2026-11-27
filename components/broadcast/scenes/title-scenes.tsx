@@ -30,27 +30,33 @@ export function OpeningScene({ config, results }: SceneProps) {
 }
 
 export function EndingScene({ config, results }: SceneProps) {
-  const winner = results.stats.leader
+  const winners = results.races.flatMap((race) =>
+    race.stats.leader ? [{ title: race.raceTitle || config.electionTitle, winner: race.stats.leader }] : [],
+  )
   return (
     <div className="absolute inset-0 flex items-center gap-24 px-32 pt-32">
-      <div className="flex flex-1 flex-col gap-12">
-        <h1 className="bc-rise text-[128px] font-black leading-[1.05] tracking-tight">
+      <div className="flex flex-1 flex-col gap-10">
+        <h1 className="bc-rise text-[112px] font-black leading-[1.05] tracking-tight">
           시청해 주셔서
           <br />
           감사합니다
         </h1>
-        {winner && (
-          <div className="bc-rise flex w-fit items-center gap-8 rounded-3xl border border-border p-5 pr-12" style={{ animationDelay: '0.3s' }}>
-            <CandidatePhoto candidate={winner} className="rounded-2xl" style={{ width: 150, height: 180 }} />
+        {winners.map(({ title, winner }, i) => (
+          <div
+            key={title}
+            className="bc-rise flex w-fit items-center gap-8 rounded-3xl border border-border bg-card p-5 pr-12"
+            style={{ animationDelay: `${0.3 + i * 0.15}s` }}
+          >
+            <CandidatePhoto candidate={winner} className="rounded-2xl" style={{ width: 125, height: 150 }} />
             <div className="flex flex-col gap-3">
-              <span className="text-2xl font-bold text-muted-foreground">{config.electionTitle} 당선인</span>
+              <span className="text-2xl font-bold text-muted-foreground">{title} 당선인</span>
               <span className="flex items-baseline gap-4 font-black leading-none">
-                <span className="text-4xl text-primary">기호 {winner.number}번</span>
-                <span className="text-7xl">{winner.name}</span>
+                <span className="text-4xl" style={{ color: winner.color }}>기호 {winner.number}번</span>
+                <span className="text-6xl">{winner.name}</span>
               </span>
             </div>
           </div>
-        )}
+        ))}
       </div>
 
       <div
@@ -76,7 +82,7 @@ export function EndingScene({ config, results }: SceneProps) {
               </div>
             )
           })}
-          <span className="pt-10 font-mono text-3xl font-bold tracking-[0.4em] text-primary">ELECTION NIGHT 2027</span>
+          <span className="pt-10 font-mono text-3xl font-bold tracking-[0.4em] text-primary">ELECTION 2027</span>
         </div>
       </div>
     </div>
