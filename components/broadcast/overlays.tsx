@@ -158,7 +158,7 @@ export function SceneTransition({ triggerKey }: { triggerKey: number }) {
           style={{ animation: 'bc-cover-content 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
         >
           <span className="font-mono text-2xl font-semibold tracking-[0.5em] opacity-80">2027 ELECTION</span>
-          <span className="text-8xl font-black leading-none tracking-tight text-balance">선택 우리학교</span>
+          <span className="text-8xl font-black leading-none tracking-tight text-balance">성사중학교 전교임원 선거</span>
           <span
             className="h-1 w-48 origin-left rounded-full bg-primary-foreground"
             style={{ animation: 'bc-cover-line 1.3s cubic-bezier(0.16, 1, 0.3, 1) both' }}
