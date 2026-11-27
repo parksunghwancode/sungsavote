@@ -7,7 +7,7 @@ export const BROADCAST_CONFIG = {
   logoOnDark: '/images/school-logo-white.png',
   winnerLabel: '전교회장 당선',
   ticker: '',
-  credits: ['주최|학생회 선거관리위원회', '진행|방송부', '함께해 주신 모든 학생 여러분 감사합니다'],
+  credits: ['주최|방송부', '진행|방송부원', '제작|박성환', '기획|박성환 · 고가빈 · 이지원'],
   sheetUrl: 'https://docs.google.com/spreadsheets/d/182bYfn4wg2QDdXQ5WU64LJXweCAfT-ZdDzbE58jIMlg/edit?usp=sharing',
   settingsSheet: '설정',
   pollSec: 5,
@@ -16,7 +16,11 @@ export const BROADCAST_CONFIG = {
 export type BroadcastConfig = typeof BROADCAST_CONFIG
 
 export const CANDIDATE_PHOTOS: Record<string, string> = {
-  임소연: '/images/candidates/lim-soyeon.jpg',
+  윤민재: '/images/candidates/yoon-minjae.png',
+  임소연: '/images/candidates/lim-soyeon.png',
+  이도영: '/images/candidates/lee-doyoung.png',
+  심민규: '/images/candidates/shim-mingyu.png',
+  동여음: '/images/candidates/dong-yeoeum.png',
 }
 
 export const DEFAULT_CANDIDATES: Candidate[] = [

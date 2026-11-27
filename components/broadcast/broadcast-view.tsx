@@ -41,13 +41,13 @@ export function BroadcastView({ slide: target, results }: { slide: Slide; result
 
   return (
     <div className="bc-respect-motion absolute inset-0">
-      <TopRule />
+      {!showChrome && <TopRule />}
       <div key={slide.id} className="absolute inset-0">
         <Scene config={BROADCAST_CONFIG} results={scoped} />
       </div>
       {showChrome && <HeaderBug config={BROADCAST_CONFIG} label={slide.label} />}
       {showTicker && <Ticker config={BROADCAST_CONFIG} results={scoped} />}
-      {showCount && <CountFooter results={scoped} />}
+      {showCount && <CountFooter results={scoped} showRate={slide.key === 'winner'} />}
       <SceneTransition triggerKey={transitionKey} />
     </div>
   )
