@@ -7,7 +7,7 @@ export const BROADCAST_CONFIG = {
   logoOnDark: '/images/school-logo-white.png',
   winnerLabel: '전교회장 당선',
   ticker: '',
-  credits: ['주최|학생회 선거관리위원회', '진행|방송부 · 학생회', '기획|박성환 · 고가빈 · 이지원'],
+  credits: ['주최|방송부', '진행|방송부원', '제작|박성환', '기획|박성환 · 고가빈 · 이지원'],
   sheetUrl: 'https://docs.google.com/spreadsheets/d/182bYfn4wg2QDdXQ5WU64LJXweCAfT-ZdDzbE58jIMlg/edit?usp=sharing',
   settingsSheet: '설정',
   pollSec: 5,
