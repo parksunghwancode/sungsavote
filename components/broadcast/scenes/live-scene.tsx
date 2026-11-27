@@ -47,27 +47,27 @@ function CountProgress({ results }: { results: ResultsState }) {
 function VoteStats({ candidate: c, compact }: { candidate: CandidateView; compact: boolean }) {
   const rise = useRiseEvent(c.votes)
   return (
-    <div className={`flex w-full flex-col ${compact ? 'gap-4' : 'gap-5'}`}>
+    <div className={`flex w-full flex-col ${compact ? 'gap-3' : 'gap-5'}`}>
       <span className="flex items-baseline gap-3 font-mono font-bold leading-none tabular-nums text-foreground">
-        <CountUp value={c.pct} decimals={1} className={compact ? 'text-[84px]' : 'text-[136px]'} />
-        <span className="text-5xl" style={{ color: c.color }}>
+        <CountUp value={c.pct} decimals={1} className={compact ? 'text-[64px]' : 'text-[136px]'} />
+        <span className={compact ? 'text-4xl' : 'text-5xl'} style={{ color: c.color }}>
           %
         </span>
       </span>
-      <div className="h-4 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+      <div className={`${compact ? 'h-3' : 'h-4'} overflow-hidden rounded-full bg-muted`} aria-hidden="true">
         <div
           className="h-full rounded-full"
           style={{ width: `${c.pct}%`, background: c.color, transition: `width 1.2s ${EASE}` }}
         />
       </div>
-      <div className={`flex items-center justify-between border-t border-border ${compact ? 'pt-4' : 'pt-5'}`}>
-        <span className="text-[26px] font-medium text-muted-foreground">득표수</span>
+      <div className={`flex items-center justify-between border-t border-border ${compact ? 'pt-3' : 'pt-5'}`}>
+        <span className={`${compact ? 'text-[22px]' : 'text-[26px]'} font-medium text-muted-foreground`}>득표수</span>
         <span
           key={rise ? `votes-${rise.id}` : 'votes'}
           className={`relative flex items-baseline gap-2 font-mono font-bold leading-none tabular-nums text-foreground ${rise ? 'bc-vote-pop' : ''}`}
         >
-          <CountUp value={c.votes} className="text-6xl" />
-          <span className="font-sans text-2xl font-bold">표</span>
+          <CountUp value={c.votes} className={compact ? 'text-[44px]' : 'text-6xl'} />
+          <span className={`font-sans ${compact ? 'text-xl' : 'text-2xl'} font-bold`}>표</span>
           <RiseBadge event={rise} color={c.color} />
         </span>
       </div>
@@ -78,11 +78,11 @@ function VoteStats({ candidate: c, compact }: { candidate: CandidateView; compac
 function ResultCard({ candidate: c, index, total }: { candidate: CandidateView; index: number; total: number }) {
   const leading = c.rank === 1 && c.votes > 0
   const wide = total <= 2
-  const photo = wide ? { width: 300, height: 360 } : total > 3 ? { width: 140, height: 168 } : { width: 170, height: 204 }
+  const photo = wide ? { width: 300, height: 360 } : total > 3 ? { width: 190, height: 228 } : { width: 240, height: 288 }
   return (
     <li
       className={`bc-rise relative flex flex-1 items-center gap-12 rounded-3xl border bg-card ${
-        wide ? 'flex-row p-10' : 'flex-col justify-center gap-5 p-8'
+        wide ? 'flex-row p-10' : 'flex-col justify-center gap-4 px-8 py-7'
       } ${leading ? 'border-primary shadow-[0_0_0_2px_var(--primary)]' : 'border-border'}`}
       style={{ animationDelay: `${0.15 + index * 0.12}s` }}
     >
@@ -93,7 +93,7 @@ function ResultCard({ candidate: c, index, total }: { candidate: CandidateView; 
       >
         {leading ? '현재 1위' : `${c.rank}위`}
       </span>
-      <CandidateIdentity candidate={c} photo={photo} nameSize={wide ? 'text-6xl' : 'text-5xl'} />
+      <CandidateIdentity candidate={c} photo={photo} nameSize={wide ? 'text-6xl' : 'text-4xl'} />
       <VoteStats candidate={c} compact={!wide} />
     </li>
   )

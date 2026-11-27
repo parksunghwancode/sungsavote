@@ -20,6 +20,7 @@ export const CANDIDATE_PHOTOS: Record<string, string> = {
   임소연: '/images/candidates/lim-soyeon.png',
   이도영: '/images/candidates/lee-doyoung.png',
   심민규: '/images/candidates/shim-mingyu.png',
+  동여음: '/images/candidates/dong-yeoeum.png',
 }
 
 export const DEFAULT_CANDIDATES: Candidate[] = [
